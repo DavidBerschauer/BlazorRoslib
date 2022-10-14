@@ -1,0 +1,83 @@
+﻿@page "/liveview"
+@using ROS;
+@using RoslibBlazor.ROS;
+@using RoslibBlazor.ROS.Topics;
+
+@inject RoslibInterop RosInterop
+
+<PageTitle>Live</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="my-6 p-4">
+    <MudTextField @bind-Value="ImgTopic" Label="Image Topic" Variant="Variant.Outlined" Class="mb-2" />
+    <MudSelect @bind-Value="ImgTopic" Label="Image Topic" Variant="Variant.Outlined" Class="mb-2">
+        @if (topics != null)
+        {
+            foreach (var t in topics)
+            {
+                <MudSelectItem Value="@t.Name">@t.Name</MudSelectItem>
+            }
+        }
+    </MudSelect>
+    <h5>@navSatMsg</h5>
+    <div class="d-flex justify-center" style="height:50%">
+        <MudImage Fluid="true" Src=@imageUrl ObjectFit="ObjectFit.ScaleDown" />
+    </div>
+    <h5>@msg</h5>
+</MudContainer>
+
+@code{
+    private string? navSatMsg;
+    private string? msg;
+
+    private string? imageUrl;
+
+    private string _imgTopic = "";
+    private string ImgTopic
+    {
+        get => _imgTopic;
+        set
+        {
+            if (_imgTopic?.Equals(value) ?? false) return;
+            _imgTopic = value;
+            UpdateImage();
+        }
+    }
+
+    private IEnumerable<Topic>? topics;
+
+    protected override void OnInitialized()
+    {
+        Task.Run(async () => await ReloadTopics());
+        RosInterop.OnStateHasChanged += (_) => UpdateImage();
+    }
+
+    private void UpdateImage()
+    {
+        imageUrl = $"http://{RosInterop?.RosHost}:8080/stream?topic={ImgTopic}&type=mjpeg";
+    }
+
+    private async Task ReloadTopics()
+    {
+        await RosInterop.SubscribeTopic<SpeedSteerMsg>("/ctrlrFSM/speed_steering", "autosys_controller/SpeedAndSteering", OnSpeedSteeringTyped);
+        await RosInterop.SubscribeTopic<NavSatFixMsg>("/ublox/fix", "sensor_msgs/NavSatFix", OnNavSat);
+        await RosInterop.GetTopics((list) =>
+        {
+            topics = list.Where((t) => t.MessageType.Equals("sensor_msgs/Image"));
+            if (ImgTopic == null)
+                ImgTopic = topics?.FirstOrDefault()?.Name ?? "";
+            InvokeAsync(StateHasChanged);
+        });
+    }
+
+    private void OnNavSat(NavSatFixMsg navSat)
+    {
+        navSatMsg = $"Seq {navSat.header?.seq}: Longitude: {navSat.longitude}, Latitude: {navSat.latitude}. Altitude: {navSat.altitude}";
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OnSpeedSteeringTyped(SpeedSteerMsg speedSteer)
+    {
+        msg = $"Seq {speedSteer.header?.seq}: Speed: {speedSteer.speed:0.00}, Steering {speedSteer.steering_angle:0.00}";
+        InvokeAsync(StateHasChanged);
+    }
+}

@@ -1,0 +1,30 @@
+﻿@page "/"
+@using ROS;
+@using RoslibBlazor.ROS;
+@using RoslibBlazor.ROS.Services;
+@using SensorBoxBlazor.Components.DashboardCards;
+
+<PageTitle>Dashboard</PageTitle>
+
+@inject RoslibInterop RosInterop
+@inject NavigationManager NavManager
+
+<MudContainer Style="height:100%" MaxWidth="MaxWidth.Large" Class="my-6 p-4">
+    <MudGrid Justify="Justify.Center">
+        <MudItem Style="display:flex;">
+            <StartStopRecordingCard />
+        </MudItem>
+        <MudItem Style="display:flex;">
+            <LatLonCard />
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code{
+    private string latLonMsg = "";
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+}

@@ -1,0 +1,87 @@
+﻿@page "/alltopics"
+@using ROS;
+@using RoslibBlazor.ROS;
+@using RoslibBlazor.ROS.Topics;
+
+@inject RoslibInterop RosInterop
+@inject NavigationManager NavManager
+
+<PageTitle>Topics</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="my-6 p-4">
+    @if (topics != null)
+    {
+        <MudTable Items="@topics" Filter="new Func<Topic, bool>(FilterFunc1)">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Verfügbare Topics</MudText>
+                <MudSpacer />
+                <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                <MudIconButton Icon="@Icons.Material.Filled.Autorenew" Color="Color.Secondary" Edge="Edge.Start" OnClick="@((e) => UpdateTopics())" />
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.MessageType</MudTd>
+                <MudTd>
+                    <MudIconButton Icon="@Icons.Material.Filled.ArrowForwardIos" Color="Color.Secondary" Edge="Edge.Start" OnClick="@((e) => GoToTopic(context))" />
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+        </MudTable>
+    }
+    else
+    {
+        <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+    }
+</MudContainer>
+@code {
+    private string searchString1 = "";
+    private Topic? selectedTopic = null;
+
+    private bool FilterFunc1(Topic topic) => FilterFunc(topic, searchString1);
+
+    private bool FilterFunc(Topic topic, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (topic.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (topic.MessageType.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+    private IEnumerable<Topic>? topics;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        UpdateTopics();
+    }
+
+    private void UpdateTopics()
+    {
+        Task.Run(async () =>
+        {
+            topics = null;
+            InvokeAsync(StateHasChanged);
+            await RosInterop.GetTopics((list) =>
+            {
+                topics = list;
+                Console.WriteLine($"Set {list.Count()} topics for table");
+                InvokeAsync(StateHasChanged);
+            });
+        });
+    }
+
+    private void GoToTopic(Topic topic)
+    {
+        NavManager.NavigateTo($"/rostopic?TopicName={topic.Name}&MsgType={topic.MessageType}");
+    }
+}

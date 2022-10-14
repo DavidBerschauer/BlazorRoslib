@@ -1,0 +1,78 @@
+﻿@using MudBlazor
+@using RoslibBlazor.ROS;
+
+@inherits LayoutComponentBase
+@inject RoslibInterop RosInterop
+@inject NavigationManager NavManager
+
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<div style="height:100vh">
+    <MudLayout Style="height:100%">
+        <MudAppBar Elevation="0">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+            <MudSpacer />
+            @switch (RosInterop.State)
+            {
+                case RosInteropState.Connected:
+                    <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Edge="Edge.Start" OnClick="@((e) => GoToRosSettings())" />
+                    break;
+                case RosInteropState.ConnectionClosed:
+                    <MudIconButton Icon="@Icons.Material.Filled.Autorenew" Color="Color.Secondary" Edge="Edge.Start" OnClick="@((e) => RosInterop.UpdateRos())" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Block" Color="Color.Warning" Edge="Edge.Start" OnClick="@((e) => GoToRosSettings())" />
+                    break;
+                case RosInteropState.ConnectionError:
+                    <MudIconButton Icon="@Icons.Material.Filled.Autorenew" Color="Color.Secondary" Edge="Edge.Start" OnClick="@((e) => RosInterop.UpdateRos())" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Dangerous" Color="Color.Error" Edge="Edge.Start" OnClick="@((e) => GoToRosSettings())" />
+                    break;
+                default:
+                    <MudProgressCircular @onclick="GoToRosSettings" Color="Color.Secondary" Indeterminate="true" />
+                    break;
+            }
+        </MudAppBar>
+        <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
+            <MudDrawerHeader>
+                <MudText Typo="Typo.h4" Color="Color.Secondary" Style="font-weight:bold">SensorBox</MudText>
+            </MudDrawerHeader>
+            <NavMenu />
+        </MudDrawer>
+        <MudMainContent Style="height:100%">
+            @Body
+        </MudMainContent>
+    </MudLayout>
+</div>
+
+@code {
+    private MudThemeProvider _mudThemeProvider;
+    private bool _isDarkMode;
+
+    protected override void OnInitialized()
+    {
+        RosInterop.OnStateHasChanged += (_) => InvokeAsync(StateHasChanged);
+        StateHasChanged();
+    }
+
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _mudThemeProvider.Theme = ThemeGenerator.GetTheme();
+            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            StateHasChanged();
+        }
+    }
+
+    private void GoToRosSettings()
+    {
+        NavManager.NavigateTo("rossettings");
+    }
+}
