@@ -1,15 +1,14 @@
 ﻿@page "/allparams"
-@using ROS;
-@using RoslibBlazor.ROS;
-@using RoslibBlazor.ROS.Services;
-@using RoslibBlazor.ROS.Rosapi;
+@using BlazorRoslib.Core.ROS;
+@using BlazorRoslib.Core.ROS.Services;
+@using BlazorRoslib.Core.ROS.Rosapi;
 
 @inject RoslibInterop RosInterop
 @inject NavigationManager NavManager
 
 <PageTitle>Params</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Large" Class="my-6 p-4">
+<MudContainer MaxWidth="MaxWidth.Large" Class="my-3 p-3">
     @if (paramList != null)
     {
         <MudTable Items="@paramList" Filter="new Func<string, bool>(FilterFunc1)">

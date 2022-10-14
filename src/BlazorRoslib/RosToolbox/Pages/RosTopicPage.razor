@@ -1,7 +1,6 @@
 ﻿@page "/rostopic"
-@using ROS;
-@using RoslibBlazor.ROS;
-@using RoslibBlazor.ROS.Topics;
+@using BlazorRoslib.Core.ROS;
+@using BlazorRoslib.Core.ROS.Topics;
 @using LiveChartsCore
 @using LiveChartsCore.SkiaSharpView
 @using LiveChartsCore.SkiaSharpView.Blazor
@@ -17,7 +16,7 @@
 
 <PageTitle>@TopicName</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Large" Class="my-6 p-4">
+<MudContainer MaxWidth="MaxWidth.Large" Class="my-3 p-3">
     <MudText Typo="Typo.h3" Color="Color.Secondary" Class="mb-3">@TopicName</MudText>
     <MudText Typo="Typo.h4" Color="Color.Secondary" Class="mb-3">@MsgType</MudText>
     @switch (topicType)

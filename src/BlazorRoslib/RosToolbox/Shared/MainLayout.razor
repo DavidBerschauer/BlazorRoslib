@@ -1,5 +1,5 @@
 ﻿@using MudBlazor
-@using RoslibBlazor.ROS;
+@using BlazorRoslib.Core.ROS;
 
 @inherits LayoutComponentBase
 @inject RoslibInterop RosInterop
@@ -33,9 +33,10 @@
             }
         </MudAppBar>
         <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
-            <MudDrawerHeader>
-                <MudText Typo="Typo.h4" Color="Color.Secondary" Style="font-weight:bold">SensorBox</MudText>
+            <MudDrawerHeader Class="d-flex flex-column align-center justify-center mud-width-full p-2">
+                <MudText Typo="Typo.h5" Color="Color.Secondary" Style="font-weight:bold">ROS-Toolbox</MudText>
             </MudDrawerHeader>
+            <MudDivider/>
             <NavMenu />
         </MudDrawer>
         <MudMainContent Style="height:100%">
@@ -65,10 +66,57 @@
     {
         if (firstRender)
         {
-            _mudThemeProvider.Theme = ThemeGenerator.GetTheme();
+            _mudThemeProvider.Theme = GenerateTheme();
             _isDarkMode = await _mudThemeProvider.GetSystemPreference();
             StateHasChanged();
         }
+    }
+
+    private MudTheme GenerateTheme()
+    {
+        return new()
+        {
+            Palette = new Palette()
+            {
+                Primary = Colors.LightGreen.Default,
+                Success = Colors.Green.Darken1,
+                Secondary = Colors.Green.Darken2,
+                Background = Colors.Grey.Lighten3,
+                AppbarBackground = Colors.LightGreen.Default,
+                PrimaryDarken = Colors.LightGreen.Darken2,
+                PrimaryLighten = Colors.LightGreen.Lighten2,
+                InfoDarken = Colors.LightGreen.Darken2,
+                InfoLighten = Colors.LightGreen.Lighten2,
+                DrawerBackground = Colors.Cyan.Lighten5,
+                ActionDefault = Colors.LightGreen.Darken4,
+                Info = Colors.LightGreen.Darken1,
+            },
+            PaletteDark = new Palette()
+            {
+                Primary = Colors.Green.Darken2,
+                Secondary = Colors.LightGreen.Default,
+                AppbarBackground = Colors.Green.Darken2,
+                BackgroundGrey = Colors.Green.Darken2,
+                Background = Colors.Grey.Darken3,
+                Surface = Colors.Grey.Darken2, //Table Background
+                PrimaryDarken = Colors.Green.Darken4,
+                PrimaryLighten = Colors.Green.Lighten1,
+                DrawerBackground = Colors.Grey.Darken1,
+                TextPrimary = Colors.Grey.Lighten4,
+                TextSecondary = Colors.Grey.Darken1,
+                PrimaryContrastText = Colors.Grey.Darken1,
+                SecondaryContrastText = Colors.Grey.Darken3,
+                TertiaryContrastText = Colors.Grey.Darken3,
+                InfoContrastText = Colors.Grey.Default,
+                DrawerIcon = Colors.Grey.Lighten3,
+                DrawerText = Colors.Grey.Lighten3,
+                ActionDefault = Colors.LightGreen.Darken1,
+                Info = Colors.LightGreen.Darken1,
+                InfoDarken = Colors.LightGreen.Darken3,
+                InfoLighten = Colors.LightGreen.Lighten1,
+
+            }
+        };
     }
 
     private void GoToRosSettings()

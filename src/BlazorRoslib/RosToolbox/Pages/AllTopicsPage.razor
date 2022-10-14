@@ -1,14 +1,13 @@
 ﻿@page "/alltopics"
-@using ROS;
-@using RoslibBlazor.ROS;
-@using RoslibBlazor.ROS.Topics;
+@using BlazorRoslib.Core.ROS;
+@using BlazorRoslib.Core.ROS.Topics;
 
 @inject RoslibInterop RosInterop
 @inject NavigationManager NavManager
 
 <PageTitle>Topics</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Large" Class="my-6 p-4">
+<MudContainer MaxWidth="MaxWidth.Large" Class="my-3 p-3">
     @if (topics != null)
     {
         <MudTable Items="@topics" Filter="new Func<Topic, bool>(FilterFunc1)">

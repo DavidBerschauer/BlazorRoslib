@@ -1,27 +1,29 @@
 ﻿@page "/"
-@using ROS;
-@using RoslibBlazor.ROS;
-@using RoslibBlazor.ROS.Services;
-@using SensorBoxBlazor.Components.DashboardCards;
+@using BlazorRoslib.Core.ROS;
+@using BlazorRoslib.Core.ROS.Services;
 
 <PageTitle>Dashboard</PageTitle>
 
 @inject RoslibInterop RosInterop
 @inject NavigationManager NavManager
 
-<MudContainer Style="height:100%" MaxWidth="MaxWidth.Large" Class="my-6 p-4">
+<MudContainer MaxWidth="MaxWidth.Large" Class="my-3 p-3">
+    <MudText Typo="Typo.h5" >To be added ...</MudText>
     <MudGrid Justify="Justify.Center">
+        
+    </MudGrid>
+</MudContainer>
+
+@code{
+
+    /*
         <MudItem Style="display:flex;">
             <StartStopRecordingCard />
         </MudItem>
         <MudItem Style="display:flex;">
             <LatLonCard />
         </MudItem>
-    </MudGrid>
-</MudContainer>
-
-@code{
-    private string latLonMsg = "";
+    */
 
     protected override void OnInitialized()
     {

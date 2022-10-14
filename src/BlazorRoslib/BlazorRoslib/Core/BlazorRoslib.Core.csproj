@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ROS\" />
+    <None Remove="Services\" />
+    <None Remove="ROS\Topics\" />
+    <None Remove="ROS\Services\" />
+    <None Remove="ROS\Rosapi\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ROS\" />
+    <Folder Include="Services\" />
+    <Folder Include="Services\" />
+    <Folder Include="ROS\Topics\" />
+    <Folder Include="ROS\Services\" />
+    <Folder Include="ROS\Rosapi\" />
+  </ItemGroup>
+</Project>
