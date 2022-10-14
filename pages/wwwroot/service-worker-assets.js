@@ -13,7 +13,7 @@
       "url": ".DS_Store"
     },
     {
-      "hash": "sha256-kr9ZtMiINfsYinGrfKQztdzB8mMe20ES0r8dmIWILxU=",
+      "hash": "sha256-Ri6lmEiyZ2ZU6w6baAVkLWZN3wbHDWV0kWIK56p9ATc=",
       "url": "css\/app.css"
     },
     {
@@ -77,7 +77,7 @@
       "url": "index.html"
     },
     {
-      "hash": "sha256-aVqIamEIPIYUQQLoUEaYP83eNuX0KEt\/QqO9DFUXX3s=",
+      "hash": "sha256-JxXJdsyFwoh1IROq2ac8vJW6aRjNsf3cBm0u0XzsRgg=",
       "url": "manifest.json"
     },
     {
@@ -365,5 +365,5 @@
       "url": "_content\/LiveChartsCore.SkiaSharpView.Blazor\/LiveChartsCore.SkiaSharpView.Blazor.bundle.scp.css"
     }
   ],
-  "version": "LXtmHSX+"
+  "version": "UaxfFyZT"
 };

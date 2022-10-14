@@ -357,3 +357,5 @@ MigrationBackup/
 *_bin
 
 Net6_Example/GeoData.Blazor/wwwroot/GeoTIFF
+pages/.DS_Store
+pages/wwwroot/.DS_Store
