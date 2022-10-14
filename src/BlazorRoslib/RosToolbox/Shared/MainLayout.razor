@@ -3,7 +3,7 @@
 
 @inherits LayoutComponentBase
 @inject RoslibInterop RosInterop
-@inject NavigationManager NavManager
+@inject CustomNavManager NavManager
 
 <MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" />
 <MudDialogProvider />
@@ -121,6 +121,6 @@
 
     private void GoToRosSettings()
     {
-        NavManager.NavigateTo("rossettings");
+        NavManager.NavigateTo("/rossettings");
     }
 }

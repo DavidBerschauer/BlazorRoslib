@@ -26,6 +26,8 @@
     <None Remove="Pages\" />
     <None Remove="LiveChartsCore.SkiaSharpView.Blazor" />
     <None Remove="CommunityToolkit.Mvvm" />
+    <None Remove="Properties\PublishProfiles\" />
+    <None Remove="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.9" />
@@ -36,5 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pages\" />
+    <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>
