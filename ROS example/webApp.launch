@@ -1,0 +1,9 @@
+<launch>
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" > 
+    <arg name="port" value="8081"/>
+    <arg name="ssl" default="true" />
+    <arg name="certfile" default="/etc/ssl/certs/ssl-cert-snakeoil.pem" />
+    <arg name="keyfile" default="/etc/ssl/certs/ssl-cert-snakeoil.key" />
+  </include>
+  <node name="web_video_server" pkg="web_video_server" type="web_video_server" output="screen" />
+</launch>

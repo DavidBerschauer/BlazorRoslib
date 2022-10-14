@@ -8,6 +8,11 @@ Based on
 
 
 ## ROS Setup
+Example launchfile: [webApp.launch](/ROS%20example/webApp.launch)
+
+Please read the following documentation!
+
+### Topics / Services / Params
 BlazorRoslib requires a [rosbridge_websocket Node](http://wiki.ros.org/rosbridge_suite/Tutorials/RunningRosbridge).
 
 When BlazorRoslib is accessed via https (required with GitHub Pages), the browser requires a SSL connection to ROS. 
@@ -22,11 +27,13 @@ Therefore the rosbridge server has to be setup for wss ([originally described he
     ```
 3. Setup a launchfile 
     ```xml
-    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"> 
-        <arg name="ssl" default="true" />
-        <arg name="certfile" default="/etc/ssl/certs/ssl-cert-snakeoil.pem" />
-        <arg name="keyfile" default="/etc/ssl/certs/ssl-cert-snakeoil.key" />
-    </include>
+    <launch>
+        <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"> 
+            <arg name="ssl" default="true" />
+            <arg name="certfile" default="/etc/ssl/certs/ssl-cert-snakeoil.pem" />
+            <arg name="keyfile" default="/etc/ssl/certs/ssl-cert-snakeoil.key" />
+        </include>
+    </launch>
     ```
     OR add these args to ``` /opt/ros/kinetic/share/rosbridge_server/launch/rosbridge_websocket.launch```
     ```xml
@@ -37,3 +44,21 @@ Therefore the rosbridge server has to be setup for wss ([originally described he
 5. This self-signed certificate is usually not accepted by the browser. As a workaround, you can open the full wss-URL in the browser and manually accept the certificate. You can find the required link on the ROS-Settings page.
 
 To avoid using SSL you can setup a webserver for static files (e.g nginx) and host your own ROS-Toolbox.
+
+### Live Video
+For live video a [web_video_server node](http://wiki.ros.org/web_video_server) is required. 
+
+Setup:
+
+Add the node to a launchfile:
+
+```xml
+<node name="web_video_server" pkg="web_video_server" type="web_video_server" output="screen" />
+```
+OR 
+
+Start the node from the console:
+```sh
+rosrun web_video_server web_video_server
+```
+
