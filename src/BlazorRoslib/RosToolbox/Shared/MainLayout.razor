@@ -4,6 +4,7 @@
 @inherits LayoutComponentBase
 @inject RoslibInterop RosInterop
 @inject CustomNavManager NavManager
+@inject ISnackbar Snackbar
 
 <MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" />
 <MudDialogProvider />
@@ -36,8 +37,14 @@
             <MudDrawerHeader Class="d-flex flex-column align-center justify-center mud-width-full p-2">
                 <MudText Typo="Typo.h5" Color="Color.Secondary" Style="font-weight:bold">ROS-Toolbox</MudText>
             </MudDrawerHeader>
-            <MudDivider/>
+            <MudDivider />
             <NavMenu />
+            <MudSpacer/>
+            <MudDivider />
+            <MudNavMenu>
+                <MudNavLink Href="https://github.com/DavidBerschauer/BlazorRoslib" Match="NavLinkMatch.Prefix"
+                            Icon="@Icons.Custom.Brands.GitHub" Target="new" IconColor="Color.Inherit">GitHub</MudNavLink>
+            </MudNavMenu>
         </MudDrawer>
         <MudMainContent Style="height:100%">
             @Body
@@ -51,7 +58,29 @@
 
     protected override void OnInitialized()
     {
-        RosInterop.OnStateHasChanged += (_) => InvokeAsync(StateHasChanged);
+        RosInterop.OnStateHasChanged += (state) =>
+        {
+            switch (state)
+            {
+                case RosInteropState.Connected:
+                    Snackbar.Add("Connected to ROS Master", Severity.Success);
+                    break;
+                case RosInteropState.ConnectionClosed:
+                    Snackbar.Add("Connection to ROS Master closed", Severity.Error);
+                    break;
+                case RosInteropState.ConnectionError:
+                    Snackbar.Add($"Error connecting to ROS Master: {RosInterop.ErrorMsg}. Check settings", Severity.Error,config =>
+                    {
+                        config.Onclick = snackbar =>
+                        {
+                            GoToRosSettings();
+                            return Task.CompletedTask;
+                        };
+                    });
+                    break;
+            }
+            InvokeAsync(StateHasChanged);
+        };
         StateHasChanged();
     }
 
@@ -123,4 +152,4 @@
     {
         NavManager.NavigateTo("/rossettings");
     }
-}
+    }

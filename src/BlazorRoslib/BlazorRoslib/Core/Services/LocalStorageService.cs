@@ -13,19 +13,24 @@ namespace BlazorRoslib.Core.Services
             _jsRuntime = jsRuntime;
         }
 
-        public async Task<T?> GetItem<T>(string key)
+        public Task<T?> GetItem<T>(string key)
+        {
+            return GetItem<T>(key, default);
+        }
+
+        public async Task<T?> GetItem<T>(string key, T? defaultValue)
         {
             try {
                 var json = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
 
                 if (json == null)
-                    return default;
+                    return defaultValue;
 
                 return JsonSerializer.Deserialize<T>(json);
             }
             catch
             {
-                return default;
+                return defaultValue;
             }
         }
 

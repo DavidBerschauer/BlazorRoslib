@@ -17,6 +17,12 @@ namespace BlazorRoslib.Core.ROS
         ConnectionError
     }
 
+    public enum RosInteropProtocol
+    {
+        WS,
+        WSS
+    }
+
     public delegate void OnStateHasChanged(RosInteropState state);
 
 
@@ -64,6 +70,21 @@ namespace BlazorRoslib.Core.ROS
             }
         }
 
+        private RosInteropProtocol _rosProtocol = RosInteropProtocol.WSS;
+        public RosInteropProtocol RosProtocol
+        {
+            get => _rosProtocol;
+            set
+            {
+                if (_rosProtocol == value) return;
+                _rosProtocol = value;
+                Task.Run(async () => await _localStorageService.SetItem("RosProtocol", _rosProtocol));
+                UpdateRos();
+            }
+        }
+
+        public string RosUrl => $"{ProtocolString(RosProtocol)}://{RosHost}:{RosPort}";
+
         private ILocalStorageService _localStorageService;
         private readonly Lazy<Task<IJSObjectReference>> moduleTask;
         private DotNetObjectReference<RoslibInterop> objRef;
@@ -87,8 +108,9 @@ namespace BlazorRoslib.Core.ROS
             allServicesSubscribers = new List<Action<IEnumerable<IService>>>();
             Task.Run(async () =>
             {
-                RosHost = await _localStorageService.GetItem<string>("RosHost") ?? "";
-                RosPort = await _localStorageService.GetItem<int>("RosPort");
+                RosHost = await _localStorageService.GetItem<string>("RosHost", "") ?? "";
+                RosPort = await _localStorageService.GetItem<int>("RosPort", 9090);
+                RosProtocol = await _localStorageService.GetItem<RosInteropProtocol>("RosProtocol", RosInteropProtocol.WSS);
             });
         }
 
@@ -96,14 +118,19 @@ namespace BlazorRoslib.Core.ROS
         {
             Task.Run(async () =>
             {
-                await InitRos(RosHost, RosPort);
+                await InitRos(RosHost, RosPort, ProtocolString(RosProtocol));
             });
         }
 
-        public async Task InitRos(string host, int port = 8081, string protocol = "ws")
+        public async Task InitRos(string host, int port = 8081, string protocol = "wss")
         {
             State = RosInteropState.NotInitialized;
             await InvokeVoid("initRos", host, port, protocol, objRef);
+            await Task.Delay(2000);
+            if(State == RosInteropState.NotInitialized)
+            {
+                OnError("Timeout");
+            }
         }
 
 #region Topics
@@ -349,6 +376,15 @@ namespace BlazorRoslib.Core.ROS
             {
                 Console.WriteLine(e.Message);
             }
+        }
+
+        private string ProtocolString(RosInteropProtocol protocol)
+        {
+            return protocol switch
+            {
+                RosInteropProtocol.WS => "ws",
+                _ => "wss"
+            };
         }
 #endregion
     }
