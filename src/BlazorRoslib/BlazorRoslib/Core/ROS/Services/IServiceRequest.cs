@@ -4,7 +4,7 @@ namespace BlazorRoslib.Core.ROS.Services
 	public interface IServiceRequest
 	{
 		string[] ArgNames { get; }
-        string[] Args { get; }
+        object[] Args { get; }
     }
 }
 

@@ -15,7 +15,7 @@
         @if (RosInterop.RosProtocol == RosInteropProtocol.WSS)
         {
             <MudText>If a wss connection can not be established, connect to the ROS master directly and accept its certificate:</MudText>
-            <MudLink Href="@RosInterop.RosUrl" Target="new">@RosInterop.RosUrl</MudLink>
+            <MudLink Href="@httpAdress" Target="new">@httpAdress</MudLink>
         }
         @if (RosInterop.RosProtocol == RosInteropProtocol.WS)
         {
@@ -33,8 +33,8 @@
     private string? msg;
     private string? otherMsg;
 
-
-    //TODO Add Protocol select when moved to library
+    private string httpAdress => $"https://{RosInterop.RosHost}:{RosInterop.RosPort}";
+    
     protected override void OnInitialized()
     {
         base.OnInitialized();

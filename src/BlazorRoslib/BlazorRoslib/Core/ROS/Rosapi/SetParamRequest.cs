@@ -10,7 +10,7 @@ namespace BlazorRoslib.Core.ROS.Rosapi
 
         public string[] ArgNames { get; } = new[] { "name", "value" };
 
-        public string[] Args => new[] { Name, Value };
+        public object[] Args => new[] { Name, Value };
     }
 }
 

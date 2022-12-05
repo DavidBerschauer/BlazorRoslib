@@ -5,7 +5,7 @@ namespace BlazorRoslib.Core.ROS.Rosapi
     {
         public string FieldName { get; set; }
         public string Type { get; set; }
-        public string Value { get; set; }
+        public object Value { get; set; }
     }
 }
 

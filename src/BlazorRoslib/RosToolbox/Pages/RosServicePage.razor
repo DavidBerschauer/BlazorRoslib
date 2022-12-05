@@ -32,7 +32,30 @@
                 <MudTd DataLabel="Fieldname">@context.FieldName</MudTd>
                 <MudTd DataLabel="Type">@context.Type</MudTd>
                 <MudTd DataLabel="Value">
-                    <MudTextField @bind-Value="context.Value"></MudTextField>
+                    @switch (context.Type.ToLower())
+                    {
+                        case "bool":
+                            <MudSwitch @bind-Checked="context.Value" Converter="@(new ObjectToBoolConverter())"></MudSwitch>
+                            break;
+                        case "byte":
+                        case "int8":
+                        case "int16":
+                        case "int32":
+                        case "int64":
+                        case "uint8":
+                        case "uint16":
+                        case "uint32":
+                        case "uint64":
+                            <MudNumericField @bind-Value="context.Value" Converter="@(new IntObjectToStringConverter())"></MudNumericField>
+                            break;
+                        case "float32":
+                        case "float64":
+                            <MudNumericField @bind-Value="context.Value" Converter="@(new FloatObjectToStringConverter())"></MudNumericField>
+                            break;
+                        default:
+                            <MudTextField @bind-Value="context.Value" Converter="@(new StringObjectToStringConverter())"></MudTextField>
+                            break;
+                    }
                 </MudTd>
             </RowTemplate>
         </MudTable>
@@ -105,7 +128,7 @@
     {
         if (requestDef == null) return;
         var argNames = new string[requestDef.Fields.Count];
-        var args = new string[requestDef.Fields.Count];
+        var args = new object[requestDef.Fields.Count];
         for (int i = 0; i < requestDef.Fields.Count; i++)
         {
             argNames[i] = requestDef.Fields[i].FieldName;
