@@ -28,6 +28,8 @@
     <None Remove="CommunityToolkit.Mvvm" />
     <None Remove="Properties\PublishProfiles\" />
     <None Remove="Helpers\" />
+    <None Remove="Components\" />
+    <None Remove="Components\DashboardCards\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.9" />
@@ -40,5 +42,7 @@
     <Folder Include="Pages\" />
     <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Components\" />
+    <Folder Include="Components\DashboardCards\" />
   </ItemGroup>
 </Project>

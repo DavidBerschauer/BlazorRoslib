@@ -21,6 +21,7 @@
     <None Remove="ROS\Topics\" />
     <None Remove="ROS\Services\" />
     <None Remove="ROS\Rosapi\" />
+    <None Remove="ROS\Services\StdSrvs\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ROS\" />
@@ -29,5 +30,6 @@
     <Folder Include="ROS\Topics\" />
     <Folder Include="ROS\Services\" />
     <Folder Include="ROS\Rosapi\" />
+    <Folder Include="ROS\Services\StdSrvs\" />
   </ItemGroup>
 </Project>
