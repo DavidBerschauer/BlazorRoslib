@@ -73,7 +73,7 @@
       "url": "icon_96.png"
     },
     {
-      "hash": "sha256-BcshFO7jzEdUFRmJitKkIO7umKWZm9+8n7emmAb8BPg=",
+      "hash": "sha256-CWjStcyUuUdPoHHAK29DhrC8pATsBl9xwiBfAA7w9NU=",
       "url": "index.html"
     },
     {
@@ -109,15 +109,15 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-6PFStiL1uzqqlF4tpALICNQaLsxPpTABuIy7iJh24Ac=",
+      "hash": "sha256-JMxZFL7YURV2u400xT3divp9FT6U3eS9QDvIknV8j30=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-FSAzCsvqHOu6YEVISQbQMVbpIOF3BmnLDTGlA4AU\/Po=",
+      "hash": "sha256-NzH4B1olmjPk2+78yrl\/RVBvvR+nw1iiGkcZsifW7N8=",
       "url": "_framework\/BlazorRoslib.Core.dll"
     },
     {
-      "hash": "sha256-\/1PHnFvBEpDNdXnvfIR1s68BJO88TgV1HeTjrcFsSvU=",
+      "hash": "sha256-P6Kvv5zvRXwzSE7tSsMzxOKNyotnobeuLjaFhOQ+0Kc=",
       "url": "_framework\/BlazorRoslib.UI.dll"
     },
     {
@@ -201,7 +201,7 @@
       "url": "_framework\/MudBlazor.dll"
     },
     {
-      "hash": "sha256-O7OczNv\/7TLWAIUJJuMLlJ1lNsXOajNfkJxPhuqA3F8=",
+      "hash": "sha256-o8RGwNyGEZIJo65kUtQnxW7HyPqIvHD1onG3IB02ABI=",
       "url": "_framework\/RosToolbox.dll"
     },
     {
@@ -357,13 +357,17 @@
       "url": "_content\/SkiaSharp.Views.Blazor\/SKHtmlCanvas.js"
     },
     {
-      "hash": "sha256-2YeevSX\/Kz1v6pycftN\/Uq1bUY5z8RVCaCz5o7lvzHs=",
+      "hash": "sha256-\/LL1s+swp8bXik6UigyDML8oXirgjKtEKdrAOpjI2gk=",
       "url": "_content\/BlazorRoslib.Core\/rosInterop.js"
+    },
+    {
+      "hash": "sha256-RNtKQc+220p48sIZKDx+ZW2cduVm8bvH2BkRdcYk+yA=",
+      "url": "_content\/BlazorRoslib.UI\/ros3d.js"
     },
     {
       "hash": "sha256-hxrFN36+lkubAGqclGNYPpUk+PqK8JlQcq49OUy4obk=",
       "url": "_content\/LiveChartsCore.SkiaSharpView.Blazor\/LiveChartsCore.SkiaSharpView.Blazor.bundle.scp.css"
     }
   ],
-  "version": "v6jcbKyJ"
+  "version": "JBu6jEFU"
 };

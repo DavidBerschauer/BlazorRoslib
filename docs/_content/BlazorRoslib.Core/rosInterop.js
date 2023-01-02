@@ -1,4 +1,4 @@
-﻿var ros;
+﻿export var ros;
 const listeners = new Array();
 
 

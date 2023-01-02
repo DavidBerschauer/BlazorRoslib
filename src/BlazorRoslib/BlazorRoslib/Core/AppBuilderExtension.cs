@@ -5,7 +5,7 @@ namespace BlazorRoslib.Core
 {
     public static class ServicesExtensions
     {
-        public static IServiceCollection UseRoslibBlazor(this IServiceCollection services, bool multipleConnections = false)
+        public static IServiceCollection UseBlazorRoslib(this IServiceCollection services, bool multipleConnections = false)
         {
             services.AddSingleton<Services.ILocalStorageService, Services.LocalStorageService>();
             if(multipleConnections)

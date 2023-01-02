@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using RosToolbox;
-using BlazorRoslib.Core;
+using BlazorRoslib.UI;
 using MudBlazor.Services;
 using MudBlazor;
 using RosToolbox.Helpers;
@@ -11,7 +11,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) })
-    .UseRoslibBlazor()
+    .UseBlazorRoslibUI()
     .AddSingleton<CustomNavManager>();
 
 builder.Services.AddMudServices(c =>

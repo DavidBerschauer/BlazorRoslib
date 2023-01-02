@@ -7,8 +7,8 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "BlazorRoslib.Core.dll": "sha256-FSAzCsvqHOu6YEVISQbQMVbpIOF3BmnLDTGlA4AU\/Po=",
-      "BlazorRoslib.UI.dll": "sha256-\/1PHnFvBEpDNdXnvfIR1s68BJO88TgV1HeTjrcFsSvU=",
+      "BlazorRoslib.Core.dll": "sha256-NzH4B1olmjPk2+78yrl\/RVBvvR+nw1iiGkcZsifW7N8=",
+      "BlazorRoslib.UI.dll": "sha256-P6Kvv5zvRXwzSE7tSsMzxOKNyotnobeuLjaFhOQ+0Kc=",
       "HarfBuzzSharp.dll": "sha256-a0tZgr+tzdMeLqEM7dquTo09Tk0X01z5SbFIMmrAwgo=",
       "LiveChartsCore.dll": "sha256-dbbkrnwfgQd2cU64Xnr5kgXOgnubY3+V3kKOlvh379w=",
       "LiveChartsCore.SkiaSharpView.Blazor.dll": "sha256-amsN+6H6SwLzMHQHnvFTROxALKz3dCbTLpainDvIufI=",
@@ -29,7 +29,7 @@
       "Microsoft.JSInterop.dll": "sha256-M6u6+0uBWEWHqGhowu0cKlVSJudqoy56P83sKU0oEzo=",
       "Microsoft.JSInterop.WebAssembly.dll": "sha256-nca56gUYTWqBoFmRjBUTuLjeq0wOTFuPdAMSHAXs7r0=",
       "MudBlazor.dll": "sha256-DF32cIsnB8c14\/lCCsNz+cO3Aurt0UMRpRj2bb\/lRg8=",
-      "RosToolbox.dll": "sha256-O7OczNv\/7TLWAIUJJuMLlJ1lNsXOajNfkJxPhuqA3F8=",
+      "RosToolbox.dll": "sha256-o8RGwNyGEZIJo65kUtQnxW7HyPqIvHD1onG3IB02ABI=",
       "SkiaSharp.dll": "sha256-G8bjxY2mpPUxqpream4n5Lm\/OhnMWweKzTOs\/hPwbtk=",
       "SkiaSharp.HarfBuzz.dll": "sha256-xYzlyJFayUmVNFMWQSEkGZNCEi2+lZGCPQ8mo7BI8CQ=",
       "SkiaSharp.Views.Blazor.dll": "sha256-m0\/YvrmLnHMtqOKUSqAyvxiKSd63EIAMPk32D8qpLd8=",

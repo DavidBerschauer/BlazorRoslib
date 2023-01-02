@@ -6,7 +6,7 @@
 
 <PageTitle>Live</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Large" Class="my-3 p-3">
+<MudContainer MaxWidth="MaxWidth.Large" Class="my-1 p-1 mud-height-full">
     <MudExpansionPanels Class="mb-2">
         <MudExpansionPanel Text="Settings">
             <MudTextField @bind-Value="ImgTopic" Label="Image Topic" Variant="Variant.Outlined" Class="mb-2" />
@@ -21,7 +21,7 @@
             </MudSelect>
         </MudExpansionPanel>
     </MudExpansionPanels>
-    <div class="d-flex justify-center">
+    <div class="d-flex justify-center mud-height-full mud-width-full" >
         <MudImage Fluid="true" Src=@imageUrl ObjectFit="ObjectFit.ScaleDown" />
     </div>
     <h5>@msg</h5>
@@ -55,6 +55,7 @@
     private void UpdateImage()
     {
         imageUrl = $"http://{RosInterop?.RosHost}:8080/stream?topic={ImgTopic}&type=mjpeg";
+        InvokeAsync(StateHasChanged);
     }
 
     private async Task ReloadTopics()
@@ -62,7 +63,7 @@
         await RosInterop.GetTopics((list) =>
         {
             topics = list.Where((t) => t.MessageType.Equals("sensor_msgs/Image"));
-            if (ImgTopic == null)
+            if (string.IsNullOrEmpty(ImgTopic))
                 ImgTopic = topics?.FirstOrDefault()?.Name ?? "";
             InvokeAsync(StateHasChanged);
         });
