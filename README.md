@@ -62,3 +62,6 @@ Start the node from the console:
 rosrun web_video_server web_video_server
 ```
 
+### Rosbag Recording
+For remote recording rosbags the [rosbag_recording_services](https://github.com/DavidBerschauer/rosbag_recording_services) is required. Please follow the installation instructions over there.
+

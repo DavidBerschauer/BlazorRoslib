@@ -109,7 +109,7 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-CncmfFu0PwJ5n+l6cgAX\/Pr1band1TFyKxX+wYiip64=",
+      "hash": "sha256-HjaNYf1JoRpcy2l\/2avjwkiexEZgCN2GX7MhYiYdibw=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -201,7 +201,7 @@
       "url": "_framework\/MudBlazor.dll"
     },
     {
-      "hash": "sha256-6DlxsgosTQz9T7ELG1JKhhiSGmOBlAIW9wUINRqxUwU=",
+      "hash": "sha256-dHlbMhOi53InxzJApmvk\/QlfttKozS\/bqEgRLBOnyUU=",
       "url": "_framework\/RosToolbox.dll"
     },
     {
@@ -369,5 +369,5 @@
       "url": "_content\/LiveChartsCore.SkiaSharpView.Blazor\/LiveChartsCore.SkiaSharpView.Blazor.bundle.scp.css"
     }
   ],
-  "version": "\/QQg+nPX"
+  "version": "0VMoqiCA"
 };

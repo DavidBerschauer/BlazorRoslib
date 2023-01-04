@@ -16,6 +16,8 @@
     {
         case RecordingState.NotAvailable:
             <MudText Typo="Typo.body1" Color="Color.Error">Service not available</MudText>
+            <MudLink Href="https://github.com/DavidBerschauer/BlazorRoslib#rosbag-recording" Match="NavLinkMatch.Prefix"
+                        Icon="@Icons.Custom.Brands.GitHub" Target="new" IconColor="Color.Inherit">See instructions on GitHub</MudLink>
             break;
         case RecordingState.Ready:
             <MudTextField Label="Name" @bind-Value="Filename" Variant="Variant.Outlined" Class="mud-width-full"></MudTextField>

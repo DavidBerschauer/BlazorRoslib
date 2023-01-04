@@ -8,7 +8,7 @@ namespace RosToolbox.Helpers
 #if DEBUG
 				return "";
 #else
-				return "/BlazorRoslib";
+				return "/BlazorRoslib/";
 #endif
 			}
 		}
