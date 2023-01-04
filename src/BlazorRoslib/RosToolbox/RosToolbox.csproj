@@ -30,6 +30,8 @@
     <None Remove="Helpers\" />
     <None Remove="Components\" />
     <None Remove="Components\DashboardCards\" />
+    <None Remove="CustomPackages\" />
+    <None Remove="CustomPackages\DataRecording\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.9" />
@@ -44,5 +46,7 @@
     <Folder Include="Helpers\" />
     <Folder Include="Components\" />
     <Folder Include="Components\DashboardCards\" />
+    <Folder Include="CustomPackages\" />
+    <Folder Include="CustomPackages\DataRecording\" />
   </ItemGroup>
 </Project>

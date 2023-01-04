@@ -11,9 +11,9 @@
 <PageTitle>@ParamName</PageTitle>
 
 <MudContainer Style="height:100%" MaxWidth="MaxWidth.Large" Class="my-3 p-3">
-    <MudText Typo="Typo.h3" Color="Color.Secondary" Class="mb-3">@ParamName</MudText>
-    <MudText Typo="Typo.h4" Color="Color.Secondary" Class="mb-3">@value</MudText>
-    <MudTextField @bind-Value="TargetValue" Variant="Variant.Outlined" Class="mud-width-full"></MudTextField>
+    <MudText Typo="Typo.h4" Color="Color.Secondary" Class="mb-3">@ParamName</MudText>
+    <MudText Class="mb-3">@value</MudText>
+    <MudTextField @bind-Value="TargetValue" Label="Target Value" Variant="Variant.Outlined" Class="mud-width-full"></MudTextField>
     <div style="white-space: pre-wrap">
         @responseMsg
     </div>

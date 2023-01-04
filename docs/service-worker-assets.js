@@ -109,15 +109,15 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-JMxZFL7YURV2u400xT3divp9FT6U3eS9QDvIknV8j30=",
+      "hash": "sha256-CncmfFu0PwJ5n+l6cgAX\/Pr1band1TFyKxX+wYiip64=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-NzH4B1olmjPk2+78yrl\/RVBvvR+nw1iiGkcZsifW7N8=",
+      "hash": "sha256-tnBROHvfIrgGXHeybG1xHsKRdrimjpdj5SPWIDca054=",
       "url": "_framework\/BlazorRoslib.Core.dll"
     },
     {
-      "hash": "sha256-P6Kvv5zvRXwzSE7tSsMzxOKNyotnobeuLjaFhOQ+0Kc=",
+      "hash": "sha256-\/QLNGkb76IkLo0nAhDYf4wwr+HVI2yE79i9tbqEr1zk=",
       "url": "_framework\/BlazorRoslib.UI.dll"
     },
     {
@@ -201,7 +201,7 @@
       "url": "_framework\/MudBlazor.dll"
     },
     {
-      "hash": "sha256-o8RGwNyGEZIJo65kUtQnxW7HyPqIvHD1onG3IB02ABI=",
+      "hash": "sha256-6DlxsgosTQz9T7ELG1JKhhiSGmOBlAIW9wUINRqxUwU=",
       "url": "_framework\/RosToolbox.dll"
     },
     {
@@ -277,7 +277,7 @@
       "url": "_framework\/System.ObjectModel.dll"
     },
     {
-      "hash": "sha256-fYp46OvleOAJMTPVFWmSt6RCAkmjTKcyhJUsJMOyG1I=",
+      "hash": "sha256-jIblQUJd\/c6lD9xw50RDqqttfnST6QpjcFEgaXGEuUo=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -293,7 +293,7 @@
       "url": "_framework\/System.Runtime.CompilerServices.Unsafe.dll"
     },
     {
-      "hash": "sha256-X1jsbt2K6AKTSZniXvGAlHRgDzj91iMt09qgom\/jKdY=",
+      "hash": "sha256-UuVp3PUu8O1EkAIWbG8cT7SYFnZFIM3dW+2Z8IaHQJw=",
       "url": "_framework\/System.Runtime.dll"
     },
     {
@@ -317,7 +317,7 @@
       "url": "_framework\/System.Text.RegularExpressions.dll"
     },
     {
-      "hash": "sha256-pXc7PEGCyktIaoxuxvP4mmePK2d9vHNN5wLAMQ6Tpgo=",
+      "hash": "sha256-4N7K0Nlbi9e+M00wmup75O+3zFVYdFTFDJCwtmCDzvs=",
       "url": "_framework\/System.Threading.dll"
     },
     {
@@ -325,7 +325,7 @@
       "url": "_framework\/dotnet.6.0.12.u2fcki2zwg.js"
     },
     {
-      "hash": "sha256-4ykKlrgnafIsZEJy2hl5Qy+t9auTm6EjgM9F\/klgh5g=",
+      "hash": "sha256-WZFOn6j4vU+IhwiQpczEyJjhApNaevlHswl6yXN4fN0=",
       "url": "_framework\/dotnet.wasm"
     },
     {
@@ -369,5 +369,5 @@
       "url": "_content\/LiveChartsCore.SkiaSharpView.Blazor\/LiveChartsCore.SkiaSharpView.Blazor.bundle.scp.css"
     }
   ],
-  "version": "JBu6jEFU"
+  "version": "\/QQg+nPX"
 };
