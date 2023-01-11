@@ -65,3 +65,11 @@ rosrun web_video_server web_video_server
 ### Rosbag Recording
 For remote recording rosbags the [rosbag_recording_services](https://github.com/DavidBerschauer/rosbag_recording_services) is required. Please follow the installation instructions over there.
 
+### 3D View
+For displaying PointCloud2 and LaserScan in the 3D View a [tf2_web_publisher node](http://wiki.ros.org/tf2_web_republisher) is required.
+
+Add the node to a launchfile:
+```xml
+<node name="tf2_web_republisher" pkg="tf2_web_republisher" type="tf2_web_republisher" output="screen"/>
+```
+
