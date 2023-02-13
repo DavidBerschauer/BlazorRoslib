@@ -20,7 +20,13 @@ When BlazorRoslib is accessed via https (required with GitHub Pages), the browse
 Therefore the rosbridge server has to be setup for wss ([originally described here](https://github.com/UbiquityRobotics/speech_commands#Installation)):
 
 1. Set up a self-signed certificate ("snakeoil") (usually already done by ubuntu, if not see this [GitHub Gist](https://gist.github.com/yyuu/4335041))
-2. Copy /etc/ssl/private/ssl-cert-snakeoil.key to /etc/ssl/certs/ (may need sudo)
+    ```
+    sudo apt-get install ssl-cert
+    ```
+2. Copy the certificate to `/certs` folder
+    ```
+    sudo cp /etc/ssl/private/ssl-cert-snakeoil.key /etc/ssl/certs/
+    ```
 3. chmod /etc/ssl/certs/ssl-cert-snakeoil.key so it is readable. /etc/ssl/certs/ssl-cert-snakeoil.pem should already be readable.
     ```bash
     sudo chmod 644 /etc/ssl/certs/ssl-cert-snakeoil.key
