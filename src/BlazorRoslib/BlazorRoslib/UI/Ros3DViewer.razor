@@ -13,6 +13,7 @@
 <div style="overflow:hidden; position:relative;" class="mud-height-full">
     <MudExpansionPanels Class="m-2" Style="position: absolute; top:0px; left:0px">
         <MudExpansionPanel Text="Settings">
+            <MudIconButton Icon="@Icons.Material.Filled.Autorenew" Color="Color.Secondary" Edge="Edge.Start" OnClick="@(async (e) => await ReloadTopics())" />
             <MudSelect @bind-Value="PointCloudTopic" Label="Pointcloud Topic" Variant="Variant.Outlined" Class="mb-2">
                 @if (pcTopics != null)
                 {
@@ -82,11 +83,15 @@
         await RosInterop.GetTopics((list) =>
         {
             pcTopics = list.Where((t) => t.MessageType.Equals("sensor_msgs/PointCloud2"));
+            /*
             if (string.IsNullOrEmpty(PointCloudTopic))
                 PointCloudTopic = pcTopics?.FirstOrDefault()?.Name ?? "";
+            */
             scanTopics = list.Where((t) => t.MessageType.Equals("sensor_msgs/LaserScan"));
+            /*
             if (string.IsNullOrEmpty(ScanTopic))
                 ScanTopic = scanTopics?.FirstOrDefault()?.Name ?? "";
+            */
             InvokeAsync(StateHasChanged);
         });
     }

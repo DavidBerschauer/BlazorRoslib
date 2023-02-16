@@ -35,7 +35,8 @@ export function addPointCloud(topic) {
 		tfClient: tfClient,
 		rootObject: viewer.scene,
 		topic: topic,
-		material: { size: 0.03, color: 0x0000ff }
+		material: { size: 0.03, color: 0x0000ff },
+		max_pts: 10000000
 	});
 	var listenerEntry = new Object();
 	listenerEntry['topic'] = topic;
