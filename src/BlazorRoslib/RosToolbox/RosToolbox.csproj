@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
-    <Configurations>Debug;Release;GitHub Pages</Configurations>
+    <Configurations>Debug;Release;GitHubPages</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -17,15 +17,15 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>anycpu</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'GitHub Pages|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'GitHubPages|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\GitHub Pages</OutputPath>
+    <OutputPath>bin\GitHubPages</OutputPath>
     <DefineConstants>TRACE;GITHUB_PAGES;NET;NET6_0;NETCOREAPP</DefineConstants>
     <WarningLevel>4</WarningLevel>
     <NoStdLib>true</NoStdLib>
-    <IntermediateOutputPath>obj\GitHub Pages</IntermediateOutputPath>
+    <IntermediateOutputPath>obj\GitHubPages</IntermediateOutputPath>
     <NoWarn></NoWarn>
     <PlatformTarget>anycpu</PlatformTarget>
     <Nullable></Nullable>
