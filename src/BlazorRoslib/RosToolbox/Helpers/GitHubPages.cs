@@ -5,10 +5,10 @@ namespace RosToolbox.Helpers
 	{
 		public static string BaseUri { get
 			{
-#if DEBUG
-				return "";
-#else
+#if GITHUB_PAGES
 				return "/BlazorRoslib/";
+#else
+                return "";
 #endif
 			}
 		}
