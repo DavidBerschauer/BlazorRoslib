@@ -26,7 +26,7 @@ jobs:
     # publishes Blazor project to the release-folder
     - name: Publish .NET Core Project
       working-directory: ./src/BlazorRoslib/RosToolbox
-      run: dotnet publish RosToolbox.csproj -c Release -o ../../../release --nologo
+      run: dotnet publish RosToolbox.csproj -c GitHubPages -o ../../../release --nologo
     
     # changes the base-tag in index.html from '/' to 'BlazorGitHubPagesDemo' to match GitHub Pages repository subdirectory
     - name: Change base-tag in index.html from / to BlazorGitHubPagesDemo
