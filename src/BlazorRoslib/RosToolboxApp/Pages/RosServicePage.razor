@@ -1,0 +1,189 @@
+﻿@page "/rosservice"
+@using BlazorRoslib.Core.ROS;
+@using BlazorRoslib.Core.ROS.Services;
+@using BlazorRoslib.Core.ROS.Rosapi;
+@using System.Text.Json;
+@using System.Text;
+
+@inject RoslibInterop RosInterop
+@inject NavigationManager NavManager
+
+<PageTitle>@ServiceName</PageTitle>
+
+<MudContainer Style="height:100%" MaxWidth="MaxWidth.Large" Class="my-3 p-3">
+    <MudText Typo="Typo.h3" Color="Color.Secondary" Class="mb-3">@ServiceName</MudText>
+    <MudText Typo="Typo.h4" Color="Color.Secondary" Class="mb-3">@type</MudText>
+    @if (requestDef != null)
+    {
+
+        <MudTable Items="@requestDef.Fields" Class="mb-3">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">@($"Request: {requestDef.Type}")</MudText>
+                <MudSpacer />
+                <MudIconButton Icon="@Icons.Material.Filled.Autorenew" Color="Color.Secondary" Edge="Edge.Start" OnClick="@((e) => OnInitialized())" />
+                <MudIconButton Icon="@Icons.Material.Filled.PhoneForwarded" Color="Color.Secondary" Edge="Edge.Start" OnClick="@((e) => CallService())" />
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Fieldname</MudTh>
+                <MudTh>Type</MudTh>
+                <MudTh>Value</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Fieldname">@context.FieldName</MudTd>
+                <MudTd DataLabel="Type">@context.Type</MudTd>
+                <MudTd DataLabel="Value">
+                    @switch (context.Type.ToLower())
+                    {
+                        case "bool":
+                            <MudSwitch @bind-Checked="context.Value" Converter="@(new ObjectToBoolConverter())"></MudSwitch>
+                            break;
+                        case "byte":
+                        case "int8":
+                        case "int16":
+                        case "int32":
+                        case "int64":
+                        case "uint8":
+                        case "uint16":
+                        case "uint32":
+                        case "uint64":
+                            <MudNumericField @bind-Value="context.Value" Converter="@(new IntObjectToStringConverter())"></MudNumericField>
+                            break;
+                        case "float32":
+                        case "float64":
+                            <MudNumericField @bind-Value="context.Value" Converter="@(new FloatObjectToStringConverter())"></MudNumericField>
+                            break;
+                        default:
+                            <MudTextField @bind-Value="context.Value" Converter="@(new StringObjectToStringConverter())"></MudTextField>
+                            break;
+                    }
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    }
+    @if (responseDef != null)
+    {
+        <MudTable Items="@responseDef.Fields" Class="mb-3">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">@($"Response: {responseDef.Type}")</MudText>
+                <MudSpacer />
+                <MudIconButton Icon="@Icons.Material.Filled.Autorenew" Color="Color.Secondary" Edge="Edge.Start" OnClick="@((e) => OnInitialized())" />
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Fieldname</MudTh>
+                <MudTh>Type</MudTh>
+                <MudTh>Value</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Fieldname">@context.FieldName</MudTd>
+                <MudTd DataLabel="Type">@context.Type</MudTd>
+                <MudTd DataLabel="Value">
+                    <div style="white-space: pre-wrap">
+                        @context.Value
+                    </div>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    }
+    <div style="white-space: pre-wrap">
+        @responseMsg
+    </div>
+</MudContainer>
+
+@code{
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "ServiceName")]
+    public string ServiceName { get; set; }
+    private string type = "Warten auf Typ";
+    private TypeDef? requestDef;
+    private TypeDef? responseDef;
+
+    private string responseMsg = "";
+
+    protected override void OnInitialized()
+    {
+        Task.Run(async () =>
+        {
+            await RosInterop.CallService<TypeResponse>(new ServiceTypeService(),
+                new GeneralServiceRequest(new[] { "service" }, new[] { ServiceName }), (result) =>
+                {
+                    type = "Type: " + result.type;
+                    InvokeAsync(StateHasChanged);
+                    Task.Run(async () => await RosInterop.CallService<TypeDefResponse>(new ServiceRequestDetailsService(),
+                        new TypeRequest() { Type = result.type }, (result) =>
+                        {
+                            requestDef = TypeDef.FromTypeDefResponse(result);
+                            InvokeAsync(StateHasChanged);
+                        }));
+                    Task.Run(async () => await RosInterop.CallService<TypeDefResponse>(new ServiceResonseDetailsService(),
+                        new TypeRequest() { Type = result.type }, (result) =>
+                        {
+                            responseDef = TypeDef.FromTypeDefResponse(result);
+                            InvokeAsync(StateHasChanged);
+                        }));
+                });
+        });
+    }
+
+    private void CallService()
+    {
+        if (requestDef == null) return;
+        var argNames = new string[requestDef.Fields.Count];
+        var args = new object[requestDef.Fields.Count];
+        for (int i = 0; i < requestDef.Fields.Count; i++)
+        {
+            argNames[i] = requestDef.Fields[i].FieldName;
+            args[i] = requestDef.Fields[i].Value;
+        }
+
+        Task.Run(async () =>
+        {
+            await RosInterop.CallService(ServiceName, requestDef.Type,
+                new GeneralServiceRequest(argNames, args),
+                (result) =>
+                {
+                    responseMsg = result;
+                    BuildResponse(result);
+                    InvokeAsync(StateHasChanged);
+                });
+        });
+    }
+
+    //TODO General messageType Input and Output Component (not only string)
+    private void BuildResponse(string result)
+    {
+        var doc = JsonDocument.Parse(result);
+        if (responseDef != null)
+        {
+            foreach (var field in responseDef.Fields)
+            {
+                try
+                {
+                    var element = doc.RootElement.GetProperty(field.FieldName);
+                    switch (element.ValueKind)
+                    {
+                        case JsonValueKind.Array:
+                            Console.WriteLine("Array found");
+                            var props = element.EnumerateArray();
+                            StringBuilder builder = new StringBuilder();
+                            while (props.MoveNext())
+                            {
+                                var prop = props.Current;
+                                builder.Append(prop.ToString());
+                                builder.Append("\n");
+                            }
+                            field.Value = builder.ToString();
+                            break;
+                        default:
+                            field.Value = element.ToString();
+                            break;
+                    }
+                    Console.WriteLine($"{field.FieldName}: {field.Value}");
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine($"Error getting property {field.FieldName}: {e.Message}");
+                }
+            }
+        }
+    }
+}

@@ -14,9 +14,11 @@
   <ItemGroup>
     <ProjectReference Include="..\BlazorRoslib\Core\BlazorRoslib.Core.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+      <ReferenceSourceTarget></ReferenceSourceTarget>
     </ProjectReference>
     <ProjectReference Include="..\BlazorRoslib\UI\BlazorRoslib.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+      <ReferenceSourceTarget></ReferenceSourceTarget>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,20 @@
+﻿@inject NavigationManager NavigationManager
+
+<MudNavMenu Color="Color.Secondary">
+    <MudNavLink Href=@($"/") Match="NavLinkMatch.All"
+                Icon="@Icons.Filled.AutoAwesomeMosaic" IconColor="Color.Inherit">Dashboard</MudNavLink>
+    <MudNavLink Href=@($"/liveview") Match="NavLinkMatch.Prefix"
+                Icon="@Icons.Filled.Image" IconColor="Color.Inherit">Live</MudNavLink>
+    <MudNavLink Href=@($"/live3dview") Match="NavLinkMatch.Prefix"
+                Icon="@Icons.Filled._3dRotation" IconColor="Color.Inherit">3D</MudNavLink>
+    <MudNavLink Href=@($"/alltopics") Match="NavLinkMatch.Prefix"
+                Icon="@Icons.Filled.DataObject" IconColor="Color.Inherit">Topics</MudNavLink>
+    <MudNavLink Href="@($"/allservices")" Match="NavLinkMatch.Prefix"
+                Icon="@Icons.Filled.CompareArrows" IconColor="Color.Inherit">Services</MudNavLink>
+    <MudNavLink Href="@($"/allparams")" Match="NavLinkMatch.Prefix"
+                Icon="@Icons.Filled.DisplaySettings" IconColor="Color.Inherit">Params</MudNavLink>
+</MudNavMenu>
+
+@code {
+
+}

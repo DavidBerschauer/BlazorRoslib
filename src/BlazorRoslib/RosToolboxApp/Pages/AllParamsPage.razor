@@ -1,0 +1,86 @@
+﻿@page "/allparams"
+@using BlazorRoslib.Core.ROS;
+@using BlazorRoslib.Core.ROS.Services;
+@using BlazorRoslib.Core.ROS.Rosapi;
+
+@inject RoslibInterop RosInterop
+@inject NavigationManager NavManager
+
+<PageTitle>Params</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="my-3 p-3">
+    @if (paramList != null)
+    {
+        <MudTable Items="@paramList" Filter="new Func<string, bool>(FilterFunc1)">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Verfügbare Params</MudText>
+                <MudSpacer />
+                <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                <MudIconButton Icon="@Icons.Material.Filled.Autorenew" Color="Color.Secondary" Edge="Edge.Start" OnClick="@((e) => UpdateParams())" />
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">@context</MudTd>
+                <MudTd>
+                    <MudIconButton Icon="@Icons.Material.Filled.ArrowForwardIos" Color="Color.Secondary" Edge="Edge.Start" OnClick="@((e) => GoToParam(context))" />
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+        </MudTable>
+    }
+    else
+    {
+        <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+    }
+    <div style="white-space: pre-wrap">
+        @msg
+    </div>
+</MudContainer>
+
+@code {
+    private string searchString1 = "";
+
+    private bool FilterFunc1(string param) => FilterFunc(param, searchString1);
+
+    private bool FilterFunc(string param, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (param.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+    private string msg = "";
+
+    private IEnumerable<string>? paramList;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        UpdateParams();
+    }
+
+    private void UpdateParams()
+    {
+        Task.Run(async () =>
+        {
+            paramList = null;
+            InvokeAsync(StateHasChanged);
+            await RosInterop.CallService<GetParamNamesResponse>(new GetParamNamesService(), (response) =>
+            {
+                paramList = response.names;
+                InvokeAsync(StateHasChanged);
+            });
+        });
+    }
+
+    private void GoToParam(string param)
+    {
+        NavManager.NavigateTo($"rosparam?ParamName={param}");
+    }
+}

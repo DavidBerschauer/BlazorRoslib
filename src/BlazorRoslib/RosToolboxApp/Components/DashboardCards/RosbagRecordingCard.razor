@@ -1,0 +1,245 @@
+﻿@using BlazorRoslib.Core.ROS;
+@using BlazorRoslib.Core.ROS.Services;
+@using BlazorRoslib.Core.ROS.Services.StdSrvs;
+@using BlazorRoslib.Core.ROS.Rosapi;
+@using BlazorRoslib.Core.Services;
+@using RosToolboxApp.CustomPackages.DataRecording;
+
+@inject RoslibInterop RosInterop
+@inject NavigationManager NavManager
+
+@inject ISnackbar Snackbar
+
+<MudPaper Class="d-flex flex-column align-center justify-center mud-width-full p-4">
+    <MudText Typo="Typo.h6" Color="Color.Secondary">Rosbag Recording</MudText>
+    @switch (State)
+    {
+        case RecordingState.NotAvailable:
+            <MudText Typo="Typo.body1" Color="Color.Error">Service not available</MudText>
+            <MudLink Href="https://github.com/DavidBerschauer/BlazorRoslib#rosbag-recording" Match="NavLinkMatch.Prefix"
+                        Icon="@Icons.Custom.Brands.GitHub" Target="new" IconColor="Color.Inherit">See instructions on GitHub</MudLink>
+            break;
+        case RecordingState.Ready:
+            <MudTextField Label="Name" @bind-Value="Filename" Variant="Variant.Outlined" Class="mud-width-full"></MudTextField>
+            <MudNumericField Label="Duration (s)" @bind-Value="Duration" Variant="Variant.Outlined" Class="mud-width-full"></MudNumericField>
+            <MudIconButton Icon="@Icons.Material.Filled.PlayCircle" Color="Color.Secondary" Edge="Edge.Start" OnClick="@((e) => StartRecording())" />
+            @if (stateMsg != null)
+            {
+                <MudText Variant="Variant.Outlined" Class="mud-width-full">@stateMsg</MudText>
+            }
+            break;
+        case RecordingState.Waiting:
+            <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+            break;
+        case RecordingState.Recording:
+            <MudIconButton Icon="@Icons.Material.Filled.StopCircle" Color="Color.Secondary" Edge="Edge.Start" OnClick="@((e) => StopRecording())" />
+            @if (stateMsg != null)
+            {
+                <MudText Variant="Variant.Outlined" Class="mud-width-full">@stateMsg</MudText>
+            }
+            @if (remainingText != null)
+            {
+                <MudText Variant="Variant.Outlined" Class="mud-width-full">@remainingText</MudText>
+            }
+            break;
+    }
+    <MudExpansionPanels Class="m-1">
+        <MudExpansionPanel Text="Topics">
+            @foreach (var topic in Topics)
+            {
+                <MudText Variant="Variant.Outlined" Class="mud-width-full">@topic</MudText>
+            }
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Secondary" Edge="Edge.Start" OnClick="@((e) => GoToTopicParam())" />
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+</MudPaper>
+
+@code{
+    enum RecordingState
+    {
+        NotAvailable,
+        Ready,
+        Waiting,
+        Recording
+    }
+
+    private string Filename { get; set; } = "";
+
+    private int Duration { get; set; } = 0;
+
+    private string? stateMsg = null;
+    private string? remainingText = null;
+
+    private string[] Topics = Array.Empty<string>();
+
+    private RecordingState State = RecordingState.Waiting;
+
+    private System.Threading.Timer? timer;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        if (RosInterop.State == RosInteropState.Connected)
+        {
+            CheckAvailable();
+        }
+        else
+        {
+            RosInterop.OnStateHasChanged += (state) =>
+            {
+                if (state == RosInteropState.Connected)
+                    CheckAvailable();
+            };
+        }
+        timer = new System.Threading.Timer(async (object? stateInfo) =>
+        {
+            await CheckRecordingState();
+        }, new System.Threading.AutoResetEvent(false), 500, 1000); // fire every 1000 milliseconds
+    }
+
+    void CheckAvailable()
+    {
+        State = RecordingState.Waiting;
+        InvokeAsync(StateHasChanged);
+        Task.Run(async () =>
+        {
+            await RosInterop.IsServiceAvailable(new StartRecordingService(), async (available) =>
+            {
+                if (available && State != RecordingState.NotAvailable)
+                    State = RecordingState.Ready;
+                else
+                    State = RecordingState.NotAvailable;
+                Console.WriteLine($"StartRecordingService is {(available ? "" : "not")} available");
+                await InvokeAsync(StateHasChanged);
+                await CheckRecordingState();
+            });
+            await RosInterop.IsServiceAvailable(new StopRecordingService(), async (available) =>
+            {
+                if (available && State != RecordingState.NotAvailable)
+                    State = RecordingState.Ready;
+                else
+                    State = RecordingState.NotAvailable;
+                Console.WriteLine($"StopRecordingService is {(available ? "" : "not")} available");
+                await InvokeAsync(StateHasChanged);
+                await CheckRecordingState();
+            });
+            await RosInterop.IsServiceAvailable(new RecordingStateService(), async (available) =>
+            {
+                if (available && State != RecordingState.NotAvailable)
+                    State = RecordingState.Ready;
+                else
+                    State = RecordingState.NotAvailable;
+                Console.WriteLine($"RecordingStateService is {(available ? "" : "not")} available");
+                await InvokeAsync(StateHasChanged);
+                await CheckRecordingState();
+            });
+        });
+    }
+
+    void StartRecording()
+    {
+        Task.Run(async () =>
+        {
+            State = RecordingState.Waiting;
+            await InvokeAsync(StateHasChanged);
+            await RosInterop.CallService<RecordResponse>(new StartRecordingService(),
+                new RecordRequest {
+                    Bagname = @$"{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")}_{Filename}",
+                    Timeout = Duration
+                }, (response) =>
+                {
+                    if (response.success)
+                    {
+                        Snackbar.Add($"Start recording: {response.message}", Severity.Success);
+                        State = RecordingState.Recording;
+                    }
+                    else
+                    {
+                        Snackbar.Add($"Start recording failed: {Filename}: {response.message}", Severity.Error);
+                        if ("Already Recording".Equals(response.message))
+                        {
+                            State = RecordingState.Recording;
+                        }
+                        else
+                        {
+                            State = RecordingState.Ready;
+                        }
+                    }
+                    stateMsg = response.message ?? "Unknown";
+                    InvokeAsync(StateHasChanged);
+                });
+            await Task.Delay(1000);
+            if (State == RecordingState.Waiting)
+            {
+                Snackbar.Add($"Start recording failed: No response, check connection", Severity.Error);
+                State = RecordingState.Ready;
+                await InvokeAsync(StateHasChanged);
+            }
+        });
+    }
+
+    void StopRecording()
+    {
+        Task.Run(async () =>
+        {
+            State = RecordingState.Waiting;
+            await InvokeAsync(StateHasChanged);
+            await RosInterop.CallService<TriggerResponse>(new StopRecordingService(), (response) =>
+            {
+                if (response.success)
+                {
+                    Snackbar.Add($"Stopped recording: {response.message}", Severity.Success);
+                }
+                else
+                {
+                    Snackbar.Add($"Stopping recording failed: {response.message}", Severity.Error);
+                }
+                State = RecordingState.Ready;
+                stateMsg = response.message ?? "Unknown";
+                InvokeAsync(StateHasChanged);
+            });
+            await Task.Delay(1000);
+            if (State == RecordingState.Waiting)
+            {
+                Snackbar.Add($"Stop recording failed: No response, check connection", Severity.Error);
+                State = RecordingState.Ready;
+                await InvokeAsync(StateHasChanged);
+            }
+        });
+    }
+
+    private void GoToTopicParam()
+    {
+        NavManager.NavigateTo("rosparam?ParamName=/data_recording/topics");
+    }
+
+    async Task CheckRecordingState()
+    {
+        if (State == RecordingState.Waiting || State == RecordingState.NotAvailable)
+            return;
+        await RosInterop.CallService<RecordStateResponse>(new RecordingStateService(), (rsp) =>
+        {
+            if (rsp.recording)
+            {
+                State = RecordingState.Recording;
+                stateMsg = $"Recording '{rsp.filename}': {rsp.filesize}";
+                if (!"-".Equals(rsp.remaining_time))
+                    remainingText = @$"Remaining {rsp.remaining_time} s";
+                else
+                    remainingText = null;
+            }
+            else
+            {
+                State = RecordingState.Ready;
+                if (!string.IsNullOrEmpty(rsp.filename))
+                    stateMsg = $"Recorded '{rsp.filename}': {rsp.filesize}";
+                else
+                    stateMsg = null;
+            }
+            if (rsp.topics != null)
+                Topics = rsp.topics;
+
+            InvokeAsync(StateHasChanged);
+        });
+    }
+}

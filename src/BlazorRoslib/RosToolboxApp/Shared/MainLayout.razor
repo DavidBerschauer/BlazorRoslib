@@ -1,0 +1,155 @@
+﻿@using MudBlazor
+@using BlazorRoslib.Core.ROS;
+
+@inherits LayoutComponentBase
+@inject RoslibInterop RosInterop
+@inject NavigationManager NavManager
+@inject ISnackbar Snackbar
+
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<div style="height:100vh">
+    <MudLayout Style="height:100%">
+        <MudAppBar Elevation="0">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+            <MudSpacer />
+            @switch (RosInterop.State)
+            {
+                case RosInteropState.Connected:
+                    <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Edge="Edge.Start" OnClick="@((e) => GoToRosSettings())" />
+                    break;
+                case RosInteropState.ConnectionClosed:
+                    <MudIconButton Icon="@Icons.Material.Filled.Autorenew" Color="Color.Secondary" Edge="Edge.Start" OnClick="@((e) => RosInterop.UpdateRos())" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Block" Color="Color.Warning" Edge="Edge.Start" OnClick="@((e) => GoToRosSettings())" />
+                    break;
+                case RosInteropState.ConnectionError:
+                    <MudIconButton Icon="@Icons.Material.Filled.Autorenew" Color="Color.Secondary" Edge="Edge.Start" OnClick="@((e) => RosInterop.UpdateRos())" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Dangerous" Color="Color.Error" Edge="Edge.Start" OnClick="@((e) => GoToRosSettings())" />
+                    break;
+                default:
+                    <MudProgressCircular @onclick="GoToRosSettings" Color="Color.Secondary" Indeterminate="true" />
+                    break;
+            }
+        </MudAppBar>
+        <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
+            <MudDrawerHeader Class="d-flex flex-column align-center justify-center mud-width-full p-2">
+                <MudText Typo="Typo.h5" Color="Color.Secondary" Style="font-weight:bold">ROS-Toolbox</MudText>
+            </MudDrawerHeader>
+            <MudDivider />
+            <NavMenu />
+            <MudSpacer />
+            <MudDivider />
+            <MudNavMenu>
+                <MudNavLink Href="https://github.com/DavidBerschauer/BlazorRoslib" Match="NavLinkMatch.Prefix"
+                            Icon="@Icons.Custom.Brands.GitHub" Target="new" IconColor="Color.Inherit">GitHub</MudNavLink>
+            </MudNavMenu>
+        </MudDrawer>
+        <MudMainContent Style="height:100%">
+            @Body
+        </MudMainContent>
+    </MudLayout>
+</div>
+
+@code {
+    private MudThemeProvider _mudThemeProvider;
+    private bool _isDarkMode;
+
+    protected override void OnInitialized()
+    {
+        RosInterop.OnStateHasChanged += (state) =>
+        {
+            switch (state)
+            {
+                case RosInteropState.Connected:
+                    Snackbar.Add("Connected to ROS Master", Severity.Success);
+                    break;
+                case RosInteropState.ConnectionClosed:
+                    Snackbar.Add("Connection to ROS Master closed", Severity.Error);
+                    break;
+                case RosInteropState.ConnectionError:
+                    Snackbar.Add($"Error connecting to ROS Master: {RosInterop.ErrorMsg}. Check settings", Severity.Error, config =>
+                    {
+                        config.Onclick = snackbar =>
+                        {
+                            GoToRosSettings();
+                            return Task.CompletedTask;
+                        };
+                    });
+                    break;
+            }
+            InvokeAsync(StateHasChanged);
+        };
+        StateHasChanged();
+    }
+
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _mudThemeProvider.Theme = GenerateTheme();
+            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            StateHasChanged();
+        }
+    }
+
+    private MudTheme GenerateTheme()
+    {
+        return new()
+        {
+            Palette = new Palette()
+            {
+                Primary = Colors.LightGreen.Default,
+                Success = Colors.Green.Darken1,
+                Secondary = Colors.Green.Darken2,
+                Background = Colors.Grey.Lighten3,
+                AppbarBackground = Colors.LightGreen.Default,
+                PrimaryDarken = Colors.LightGreen.Darken2,
+                PrimaryLighten = Colors.LightGreen.Lighten2,
+                InfoDarken = Colors.LightGreen.Darken2,
+                InfoLighten = Colors.LightGreen.Lighten2,
+                DrawerBackground = Colors.Cyan.Lighten5,
+                ActionDefault = Colors.LightGreen.Darken4,
+                Info = Colors.LightGreen.Darken1,
+            },
+            PaletteDark = new Palette()
+            {
+                Primary = Colors.Green.Darken2,
+                Secondary = Colors.LightGreen.Default,
+                AppbarBackground = Colors.Green.Darken2,
+                BackgroundGrey = Colors.Green.Darken2,
+                Background = Colors.Grey.Darken3,
+                Surface = Colors.Grey.Darken2, //Table Background
+                PrimaryDarken = Colors.Green.Darken4,
+                PrimaryLighten = Colors.Green.Lighten1,
+                DrawerBackground = Colors.Grey.Darken1,
+                TextPrimary = Colors.Grey.Lighten4,
+                TextSecondary = Colors.Grey.Darken1,
+                PrimaryContrastText = Colors.Grey.Darken1,
+                SecondaryContrastText = Colors.Grey.Darken3,
+                TertiaryContrastText = Colors.Grey.Darken3,
+                InfoContrastText = Colors.Grey.Default,
+                DrawerIcon = Colors.Grey.Lighten3,
+                DrawerText = Colors.Grey.Lighten3,
+                ActionDefault = Colors.LightGreen.Darken1,
+                Info = Colors.LightGreen.Darken1,
+                InfoDarken = Colors.LightGreen.Darken3,
+                InfoLighten = Colors.LightGreen.Lighten1,
+
+            }
+        };
+    }
+
+    private void GoToRosSettings()
+    {
+        NavManager.NavigateTo("rossettings");
+    }
+}
