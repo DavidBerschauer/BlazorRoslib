@@ -30,6 +30,7 @@
     <PlatformTarget>anycpu</PlatformTarget>
     <Nullable></Nullable>
   </PropertyGroup>
+  <EmccTotalMemory Condition="'$(Configuration)'=='Release'">134217728</EmccTotalMemory>
   <ItemGroup>
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
   </ItemGroup>
