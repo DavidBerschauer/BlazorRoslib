@@ -17,12 +17,12 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 7.0.x
     - name: Restore Workloads
       working-directory: ./src/BlazorRoslib/RosToolbox
       run: |
         dotnet workload restore
-        dotnet workload install wasm-tools-net6
+        dotnet workload install wasm-tools-net7
     # publishes Blazor project to the release-folder
     - name: Publish .NET Core Project
       working-directory: ./src/BlazorRoslib/RosToolbox
