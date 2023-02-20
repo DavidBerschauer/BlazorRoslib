@@ -93,7 +93,7 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-JE\/5tOpim2ob8ggOLyW1SQ5WU2wX4yVp2FABMbalFU4=",
+      "hash": "sha256-Wbp10p8NtVEzAqcnW9HQ2e\/3Fyse8XOMXUpAINpyQUc=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -297,11 +297,11 @@
       "url": "_framework\/System.Threading.dll"
     },
     {
-      "hash": "sha256-J2LBRFtQ8vpuPGG7gegd8uNg3ZSNRNP4XAHd8ht\/AXQ=",
+      "hash": "sha256-SN9oGpUrxZa6sB02InC69xhF\/hEM6v7Ah0WyOwDoXf4=",
       "url": "_framework\/dotnet.7.0.3.m78qbqwip6.js"
     },
     {
-      "hash": "sha256-\/vx13FMd3MFpVaQUvJ2jwa5Pc6NvllUh07mkaMIZYDY=",
+      "hash": "sha256-OyRXfyVpnmi3aZiQHyFVhcshHAOcrp3lInfTp470tEk=",
       "url": "_framework\/dotnet.wasm"
     },
     {
@@ -345,5 +345,5 @@
       "url": "_content\/LiveChartsCore.SkiaSharpView.Blazor\/LiveChartsCore.SkiaSharpView.Blazor.bundle.scp.css"
     }
   ],
-  "version": "GVQUg8xr"
+  "version": "OlZFyehI"
 };
