@@ -24,7 +24,7 @@ jobs:
       working-directory: ./src/BlazorRoslib/RosToolbox
       run: |
         dotnet workload restore
-        dotnet workload install wasm-tools-net6
+        dotnet workload install wasm-tools
     - name: Clean localHosting
       run: rm -r localHosting
     # publishes Blazor project to the release-folder
