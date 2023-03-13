@@ -61,7 +61,7 @@
       "url": "index.html"
     },
     {
-      "hash": "sha256-69ThxSmyz3Z7sg++ldbsgAE44Di4f8SudldT5bAVNyk=",
+      "hash": "sha256-vhr1KNo7x1amvT3s3qjcDXDAkNFGF+gPJi82UPLk60I=",
       "url": "manifest.json"
     },
     {
@@ -93,7 +93,7 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-AUWjtB6r1FnS+Xwzd99nYyLtyQSZm0VljA6ZZlbcpBI=",
+      "hash": "sha256-3j2J3pd9eWG45TBkQfmKQ\/WzAZ\/krrpE4Z2Bq9d5Z4w=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -181,11 +181,11 @@
       "url": "_framework\/Microsoft.JSInterop.WebAssembly.dll"
     },
     {
-      "hash": "sha256-AxQ\/qKTFabZSj0pCQOyAHP01Zw1jKQPYaBZyQ2w4Cno=",
+      "hash": "sha256-x6YeB7Hm3QUVftK+ml8whdJF6ebiELpRPbpOUGg4j34=",
       "url": "_framework\/MudBlazor.dll"
     },
     {
-      "hash": "sha256-EYV18wKndeks8e\/qzn9S2bh8hTIJ+z+SSpI7ekmXrcs=",
+      "hash": "sha256-WcxdiwZYZxW2dvC8s6+ijt\/A5C7Nu9F2aIwdKNYUdjQ=",
       "url": "_framework\/RosToolbox.dll"
     },
     {
@@ -345,5 +345,5 @@
       "url": "_content\/LiveChartsCore.SkiaSharpView.Blazor\/LiveChartsCore.SkiaSharpView.Blazor.bundle.scp.css"
     }
   ],
-  "version": "3t34rJXO"
+  "version": "4YDj0xlW"
 };
