@@ -61,7 +61,7 @@
       "url": "index.html"
     },
     {
-      "hash": "sha256-69ThxSmyz3Z7sg++ldbsgAE44Di4f8SudldT5bAVNyk=",
+      "hash": "sha256-vhr1KNo7x1amvT3s3qjcDXDAkNFGF+gPJi82UPLk60I=",
       "url": "manifest.json"
     },
     {
@@ -93,7 +93,7 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-Wbp10p8NtVEzAqcnW9HQ2e\/3Fyse8XOMXUpAINpyQUc=",
+      "hash": "sha256-OJeZq6s837naKIZTrpX3goBuOrtXjStAS+SgafLWPCs=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -181,11 +181,11 @@
       "url": "_framework\/Microsoft.JSInterop.WebAssembly.dll"
     },
     {
-      "hash": "sha256-AxQ\/qKTFabZSj0pCQOyAHP01Zw1jKQPYaBZyQ2w4Cno=",
+      "hash": "sha256-x6YeB7Hm3QUVftK+ml8whdJF6ebiELpRPbpOUGg4j34=",
       "url": "_framework\/MudBlazor.dll"
     },
     {
-      "hash": "sha256-RPakgO1azxr86VylJIdZ0EQ2mzBjch083pR\/bTrT7fM=",
+      "hash": "sha256-028GayD9A+CPeyn4825r9MyAtUJjho0tTCttpk+f9Jk=",
       "url": "_framework\/RosToolbox.dll"
     },
     {
@@ -345,5 +345,5 @@
       "url": "_content\/LiveChartsCore.SkiaSharpView.Blazor\/LiveChartsCore.SkiaSharpView.Blazor.bundle.scp.css"
     }
   ],
-  "version": "OlZFyehI"
+  "version": "bRHwXp0n"
 };
