@@ -62,6 +62,7 @@
     {
         base.OnInitialized();
         UpdateTopics();
+        RosInterop.OnStateHasChanged += (_) => UpdateTopics();
     }
 
     private void UpdateTopics()

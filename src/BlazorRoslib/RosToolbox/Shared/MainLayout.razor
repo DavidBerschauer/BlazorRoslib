@@ -37,10 +37,10 @@
             <MudDrawerHeader Class="d-flex flex-column align-center justify-center mud-width-full p-2">
                 <MudText Typo="Typo.h5" Color="Color.Secondary" Style="font-weight:bold">ROS-Toolbox</MudText>
             </MudDrawerHeader>
-            <MudDivider />
+            <MudDivider Style="max-height:1px"/>
             <NavMenu />
-            <MudSpacer/>
-            <MudDivider />
+            <MudSpacer />
+            <MudDivider Style="max-height:1px"/>
             <MudNavMenu>
                 <MudNavLink Href="https://github.com/DavidBerschauer/BlazorRoslib" Match="NavLinkMatch.Prefix"
                             Icon="@Icons.Custom.Brands.GitHub" Target="new" IconColor="Color.Inherit">GitHub</MudNavLink>
@@ -107,29 +107,29 @@
         {
             Palette = new Palette()
             {
-                Primary = Colors.LightGreen.Default,
+                Primary = Colors.Amber.Darken1,
                 Success = Colors.Green.Darken1,
-                Secondary = Colors.Green.Darken2,
+                Secondary = Colors.Orange.Darken2,
                 Background = Colors.Grey.Lighten3,
-                AppbarBackground = Colors.LightGreen.Default,
-                PrimaryDarken = Colors.LightGreen.Darken2,
-                PrimaryLighten = Colors.LightGreen.Lighten2,
+                AppbarBackground = Colors.Amber.Darken1,
+                PrimaryDarken = Colors.Amber.Darken3,
+                PrimaryLighten = Colors.Amber.Lighten1,
                 InfoDarken = Colors.LightGreen.Darken2,
                 InfoLighten = Colors.LightGreen.Lighten2,
                 DrawerBackground = Colors.Cyan.Lighten5,
-                ActionDefault = Colors.LightGreen.Darken4,
+                ActionDefault = Colors.Orange.Darken1,
                 Info = Colors.LightGreen.Darken1,
             },
             PaletteDark = new Palette()
             {
-                Primary = Colors.Green.Darken2,
-                Secondary = Colors.LightGreen.Default,
-                AppbarBackground = Colors.Green.Darken2,
-                BackgroundGrey = Colors.Green.Darken2,
+                Primary = Colors.Orange.Darken2,
+                Secondary = Colors.Amber.Darken1,
+                AppbarBackground = Colors.Orange.Darken2,
+                BackgroundGrey = Colors.Orange.Darken2,
                 Background = Colors.Grey.Darken3,
                 Surface = Colors.Grey.Darken2, //Table Background
-                PrimaryDarken = Colors.Green.Darken4,
-                PrimaryLighten = Colors.Green.Lighten1,
+                PrimaryDarken = Colors.Orange.Darken4,
+                PrimaryLighten = Colors.Orange.Lighten1,
                 DrawerBackground = Colors.Grey.Darken1,
                 TextPrimary = Colors.Grey.Lighten4,
                 TextSecondary = Colors.Grey.Darken1,
@@ -139,7 +139,7 @@
                 InfoContrastText = Colors.Grey.Default,
                 DrawerIcon = Colors.Grey.Lighten3,
                 DrawerText = Colors.Grey.Lighten3,
-                ActionDefault = Colors.LightGreen.Darken1,
+                ActionDefault = Colors.Amber.Darken1,
                 Info = Colors.LightGreen.Darken1,
                 InfoDarken = Colors.LightGreen.Darken3,
                 InfoLighten = Colors.LightGreen.Lighten1,

@@ -49,7 +49,7 @@
     protected override void OnInitialized()
     {
         Task.Run(async () => await ReloadTopics());
-        RosInterop.OnStateHasChanged += (_) => UpdateImage();
+        RosInterop.OnStateHasChanged += async (_) => await ReloadTopics();
     }
 
     private void UpdateImage()

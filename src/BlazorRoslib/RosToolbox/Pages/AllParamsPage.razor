@@ -63,6 +63,7 @@
     {
         base.OnInitialized();
         UpdateParams();
+        RosInterop.OnStateHasChanged += (_) => UpdateParams();
     }
 
     private void UpdateParams()

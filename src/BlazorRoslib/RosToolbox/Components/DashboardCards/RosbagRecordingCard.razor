@@ -20,7 +20,7 @@
                         Icon="@Icons.Custom.Brands.GitHub" Target="new" IconColor="Color.Inherit">See instructions on GitHub</MudLink>
             break;
         case RecordingState.Ready:
-            <MudTextField Label="Name" @bind-Value="Filename" Variant="Variant.Outlined" Class="mud-width-full"></MudTextField>
+            <MudTextField Label="Name" @bind-Value="Filename" Variant="Variant.Outlined" Class="mud-width-full mb-2"></MudTextField>
             <MudNumericField Label="Duration (s)" @bind-Value="Duration" Variant="Variant.Outlined" Class="mud-width-full"></MudNumericField>
             <MudIconButton Icon="@Icons.Material.Filled.PlayCircle" Color="Color.Secondary" Edge="Edge.Start" OnClick="@((e) => StartRecording())" />
             @if (stateMsg != null)
