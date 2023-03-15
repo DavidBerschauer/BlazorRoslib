@@ -10,7 +10,7 @@
 <MudContainer MaxWidth="MaxWidth.Large" Class="my-3 p-3">
     @if (services != null)
     {
-        <MudTable Items="@services" Filter="new Func<IService, bool>(FilterFunc1)">
+        <MudTable Items="@services" Filter="new Func<IRosService, bool>(FilterFunc1)">
             <ToolBarContent>
                 <MudText Typo="Typo.h6">Verfügbare Services</MudText>
                 <MudSpacer />
@@ -48,9 +48,9 @@
 @code {
     private string searchString1 = "";
 
-    private bool FilterFunc1(IService service) => FilterFunc(service, searchString1);
+    private bool FilterFunc1(IRosService service) => FilterFunc(service, searchString1);
 
-    private bool FilterFunc(IService service, string searchString)
+    private bool FilterFunc(IRosService service, string searchString)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
@@ -60,7 +60,7 @@
     }
     private string msg = "";
 
-    private IEnumerable<IService>? services;
+    private IEnumerable<IRosService>? services;
 
     protected override void OnInitialized()
     {
@@ -83,7 +83,7 @@
         });
     }
 
-    private void CallService(IService service)
+    private void CallService(IRosService service)
     {
         // new[] { "type" }, new[] {"std_msgs/Int32"}
         RosInterop.CallService(service, (result) =>
@@ -93,7 +93,7 @@
         });
     }
 
-    private void GoToService(IService service)
+    private void GoToService(IRosService service)
     {
         NavManager.NavigateTo($"rosservice?ServiceName={service.Name}");
     }

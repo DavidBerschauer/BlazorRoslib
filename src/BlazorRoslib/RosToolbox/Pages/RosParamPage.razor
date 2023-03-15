@@ -48,8 +48,9 @@
 
     private Task LoadParam()
     {
-        return RosInterop.CallService<GetParamResponse>(new GetParamService(),
-                new GetParamRequest() { Name = ParamName }, (result) =>
+        return RosInterop.CallService(GetParamService.Instance,
+                new () { Name = ParamName },
+                (result) =>
                 {
                     value = "Value: " + result.value;
                     _targetValue = result.value;
@@ -63,7 +64,7 @@
     {
         Task.Run(async () =>
         {
-            await RosInterop.CallService(new SetParamService(),
+            await RosInterop.CallService(SetParamService.Instance,
                 new SetParamRequest() { Name = ParamName, Value = TargetValue }, (result) =>
                 {
                     Task.Run(async () => await LoadParam());

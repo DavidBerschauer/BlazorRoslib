@@ -103,18 +103,19 @@
     {
         Task.Run(async () =>
         {
-            await RosInterop.CallService<TypeResponse>(new ServiceTypeService(),
-                new GeneralServiceRequest(new[] { "service" }, new[] { ServiceName }), (result) =>
+            await RosInterop.CallService(ServiceTypeService.Instance,
+                new() { Service = ServiceName },
+                (result) =>
                 {
                     type = "Type: " + result.type;
                     InvokeAsync(StateHasChanged);
-                    Task.Run(async () => await RosInterop.CallService<TypeDefResponse>(new ServiceRequestDetailsService(),
+                    Task.Run(async () => await RosInterop.CallService(ServiceRequestDetailsService.Instance,
                         new TypeRequest() { Type = result.type }, (result) =>
                         {
                             requestDef = TypeDef.FromTypeDefResponse(result);
                             InvokeAsync(StateHasChanged);
                         }));
-                    Task.Run(async () => await RosInterop.CallService<TypeDefResponse>(new ServiceResonseDetailsService(),
+                    Task.Run(async () => await RosInterop.CallService(ServiceResonseDetailsService.Instance,
                         new TypeRequest() { Type = result.type }, (result) =>
                         {
                             responseDef = TypeDef.FromTypeDefResponse(result);

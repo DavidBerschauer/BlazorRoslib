@@ -3,11 +3,11 @@ using BlazorRoslib.Core.ROS.Services;
 
 namespace BlazorRoslib.Core.ROS.Rosapi
 {
-    public class ServiceResonseDetailsService : IService
+    public class ServiceResonseDetailsService : RosService<ServiceResonseDetailsService, TypeRequest, TypeDefResponse>
     {
-        public string Name => "/rosapi/service_response_details";
+        public override string Name => "/rosapi/service_response_details";
 
-        public string? Type => "rosapi/ServiceResponseDetails";
+        public override string? Type => "rosapi/ServiceResponseDetails";
     }
 }
 

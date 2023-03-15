@@ -72,7 +72,7 @@
         {
             paramList = null;
             InvokeAsync(StateHasChanged);
-            await RosInterop.CallService<GetParamNamesResponse>(new GetParamNamesService(), (response) =>
+            await RosInterop.CallService(GetParamNamesService.Instance, (response) =>
             {
                 paramList = response.names;
                 InvokeAsync(StateHasChanged);

@@ -103,7 +103,7 @@
         InvokeAsync(StateHasChanged);
         Task.Run(async () =>
         {
-            await RosInterop.IsServiceAvailable(new StartRecordingService(), async (available) =>
+            await RosInterop.IsServiceAvailable(StartRecordingService.Instance, async (available) =>
             {
                 if (available && State != RecordingState.NotAvailable)
                     State = RecordingState.Ready;
@@ -113,7 +113,7 @@
                 await InvokeAsync(StateHasChanged);
                 await CheckRecordingState();
             });
-            await RosInterop.IsServiceAvailable(new StopRecordingService(), async (available) =>
+            await RosInterop.IsServiceAvailable(StopRecordingService.Instance, async (available) =>
             {
                 if (available && State != RecordingState.NotAvailable)
                     State = RecordingState.Ready;
@@ -123,7 +123,7 @@
                 await InvokeAsync(StateHasChanged);
                 await CheckRecordingState();
             });
-            await RosInterop.IsServiceAvailable(new RecordingStateService(), async (available) =>
+            await RosInterop.IsServiceAvailable(RecordingStateService.Instance, async (available) =>
             {
                 if (available && State != RecordingState.NotAvailable)
                     State = RecordingState.Ready;
@@ -142,8 +142,8 @@
         {
             State = RecordingState.Waiting;
             await InvokeAsync(StateHasChanged);
-            await RosInterop.CallService<RecordResponse>(new StartRecordingService(),
-                new RecordRequest {
+            await RosInterop.CallService(StartRecordingService.Instance,
+                new (){
                     Bagname = @$"{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")}_{Filename}",
                     Timeout = Duration
                 }, (response) =>
@@ -184,7 +184,7 @@
         {
             State = RecordingState.Waiting;
             await InvokeAsync(StateHasChanged);
-            await RosInterop.CallService<TriggerResponse>(new StopRecordingService(), (response) =>
+            await RosInterop.CallService(StopRecordingService.Instance, (response) =>
             {
                 if (response.success)
                 {
@@ -217,7 +217,7 @@
     {
         if (State == RecordingState.Waiting || State == RecordingState.NotAvailable)
             return;
-        await RosInterop.CallService<RecordStateResponse>(new RecordingStateService(), (rsp) =>
+        await RosInterop.CallService(RecordingStateService.Instance, (rsp) =>
         {
             if (rsp.recording)
             {

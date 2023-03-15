@@ -3,11 +3,22 @@ using BlazorRoslib.Core.ROS.Services;
 
 namespace BlazorRoslib.Core.ROS.Rosapi
 {
-    public class SetParamService : IService
+    public class SetParamService : RosService<SetParamService, SetParamRequest, ServiceResponseBase>
     {
-        public string Name => "/rosapi/set_param";
+        public override string Name => "/rosapi/set_param";
 
-        public string? Type => "rosapi/SetParam";
+        public override string? Type => "rosapi/SetParam";
+    }
+
+    public class SetParamRequest : IServiceRequest
+    {
+        public string Name { get; set; } = "";
+
+        public string Value { get; set; } = "";
+
+        public string[] ArgNames { get; } = new[] { "name", "value" };
+
+        public object[] Args => new[] { Name, Value };
     }
 }
 

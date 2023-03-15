@@ -3,10 +3,10 @@ using BlazorRoslib.Core.ROS.Services;
 
 namespace RosToolbox.CustomPackages.DataRecording;
 
-public class StartRecordingService : IService
+public class StartRecordingService : RosService<StartRecordingService, RecordRequest, RecordResponse>
 {
-    public string Name => @"/data_recording/start_recording";
-    public string? Type => "data_recording/Record";
+    public override string Name => @"/data_recording/start_recording";
+    public override string? Type => "data_recording/Record";
 }
 
 public class RecordRequest : IServiceRequest

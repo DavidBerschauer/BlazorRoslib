@@ -22,17 +22,10 @@
             <MudText>If this page is accessed via https WSS is required!</MudText>
         }
         <h5>@RosInterop.ErrorMsg</h5>
-        <h5>@navSatMsg</h5>
-        <h5>@msg</h5>
-        <h5>@otherMsg</h5>
     </MudPaper>
 </MudContainer>
 
 @code{
-    private string? navSatMsg;
-    private string? msg;
-    private string? otherMsg;
-
     private string httpAdress => $"https://{RosInterop.RosHost}:{RosInterop.RosPort}";
     
     protected override void OnInitialized()

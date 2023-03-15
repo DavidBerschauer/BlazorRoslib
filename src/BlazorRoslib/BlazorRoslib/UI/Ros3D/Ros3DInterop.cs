@@ -19,7 +19,7 @@ public class Ros3DInterop : IAsyncDisposable
     public Ros3DInterop(RoslibInterop ros, IJSRuntime jsRuntime, ILocalStorageService localStorageService)
     {
         this.ros = ros;
-        ros.OnStateHasChanged += async (s) => await InitViewer();
+        ros.OnStateHasChanged += async (s) => await OnRosStateChanged();
         _localStorageService = localStorageService;
         moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
             "import", "./_content/BlazorRoslib.UI/ros3d.js").AsTask());
@@ -29,6 +29,11 @@ public class Ros3DInterop : IAsyncDisposable
     public async Task InitViewer()
     {
         await InvokeVoid("initRos3d");
+    }
+
+    public async Task OnRosStateChanged()
+    {
+        await InvokeVoid("updateTFClient");
     }
 
     public async Task AddPointCloud(string topic)

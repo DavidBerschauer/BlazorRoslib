@@ -92,7 +92,7 @@ public delegate void OnStateHasChanged(RosInteropState state);
     private readonly Dictionary<int, Action<string>> serviceDict;
     private int lastServiceId = 0;
     private readonly List<Action<IEnumerable<Topic>>> allTopicSubscribers;
-    private readonly List<Action<IEnumerable<IService>>> allServicesSubscribers;
+    private readonly List<Action<IEnumerable<IRosService>>> allServicesSubscribers;
 
     public RoslibInterop(IJSRuntime jsRuntime, ILocalStorageService localStorageService)
     {
@@ -105,7 +105,7 @@ public delegate void OnStateHasChanged(RosInteropState state);
         topicDict = new Dictionary<TopicDictKey, List<Action<string, string, string>>>();
         serviceDict = new Dictionary<int, Action<string>>();
         allTopicSubscribers = new List<Action<IEnumerable<Topic>>>();
-        allServicesSubscribers = new List<Action<IEnumerable<IService>>>();
+        allServicesSubscribers = new List<Action<IEnumerable<IRosService>>>();
         Task.Run(async () =>
         {
             RosHost = await _localStorageService.GetItem<string>("RosHost", "") ?? "";
@@ -176,13 +176,13 @@ public delegate void OnStateHasChanged(RosInteropState state);
 
 #region Services
 
-    public async Task GetServices(Action<IEnumerable<IService>> callback)
+    public async Task GetServices(Action<IEnumerable<IRosService>> callback)
     {
         allServicesSubscribers.Add(callback);
         await InvokeVoid("getServices", objRef, nameof(OnGetServices));
     }
 
-    public Task IsServiceAvailable(IService service, Action<bool> callback)
+    public Task IsServiceAvailable(IRosService service, Action<bool> callback)
     {
         return IsServiceAvailable(service.Name, callback);
     }
@@ -195,22 +195,28 @@ public delegate void OnStateHasChanged(RosInteropState state);
         });
     }
 
-    public Task CallService<T>(IService service, Action<T> callback) where T : ServiceResponseBase
+    public Task CallService<T, Req, Res>(RosService<T, Req, Res> service, Action<Res> callback)
+        where T : RosService<T, Req, Res>, new()
+        where Req : IServiceRequest
+        where Res : ServiceResponseBase
     {
-        return CallService(service, null, callback);
+        return CallService(service, null, (json) => DeserializeAndCall(json, callback));
     }
 
-    public Task CallService(IService service, Action<string> callback)
+    public Task CallService(IRosService service, Action<string> callback)
     {
         return CallService(service.Name, service.Type ?? "", null, callback);
     }
 
-    public Task CallService<T>(IService service, IServiceRequest? request, Action<T> callback) where T : ServiceResponseBase
+    public Task CallService<T, Req, Res>(RosService<T, Req, Res> service, Req? request, Action<Res> callback)
+        where T : RosService<T, Req, Res>, new()
+        where Req : IServiceRequest
+        where Res : ServiceResponseBase
     {
         return CallService(service, request, (json) => DeserializeAndCall(json, callback));
     }
 
-    public Task CallService(IService service, IServiceRequest? request, Action<string> callback)
+    public Task CallService(IRosService service, IServiceRequest? request, Action<string> callback)
     {
         return CallService(service.Name, service.Type ?? "", request, callback);
     }
@@ -284,7 +290,7 @@ public delegate void OnStateHasChanged(RosInteropState state);
     [JSInvokable]
     public void OnGetServices(string[] names)
     {
-        List<IService> list = new List<IService>();
+        List<IRosService> list = new List<IRosService>();
         int count = names.Length;
         Console.WriteLine($"Got {count} services");
         for (int i = 0; i < count; i++)
