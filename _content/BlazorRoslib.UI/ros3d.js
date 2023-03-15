@@ -6,13 +6,20 @@ const pcClients = new Array();
 const scanClients = new Array();
 
 export function initRos3d() {
-	console.log('Init viewer')
+	console.log('Init viewer');
+	viewerDiv = document.getElementById("viewerDiv")
 	viewer = new ROS3D.Viewer({
 		divID: 'viewerDiv',
-		width: 800,
-		height: 600,
-		antialias: true
+		width: viewerDiv.offsetWidth,
+		height: viewerDiv.offsetHeight,
+		antialias: true,
+		near: 0.3
 	});
+	updateTFClient();
+	new ResizeObserver(() => viewer.resize(viewerDiv.offsetWidth, viewerDiv.offsetHeight)).observe(viewerDiv);
+}
+
+export function updateTFClient() {
 	// Setup a client to listen to TFs.
 	tfClient = new ROSLIB.TFClient({
 		ros: ros,
@@ -20,8 +27,6 @@ export function initRos3d() {
 		transThres: 0.01,
 		rate: 10.0,
 	});
-	viewerDiv = document.getElementById("viewerDiv")
-	new ResizeObserver(() => viewer.resize(viewerDiv.offsetWidth, viewerDiv.offsetHeight)).observe(viewerDiv);
 }
 
 export function updateFixedFrame(frameId) {
@@ -35,7 +40,10 @@ export function addPointCloud(topic) {
 		tfClient: tfClient,
 		rootObject: viewer.scene,
 		topic: topic,
-		material: { size: 0.03, color: 0x0000ff },
+		material: {
+			color: 0x0000ff,
+			size: 0.05,
+		},
 		max_pts: 10000000
 	});
 	var listenerEntry = new Object();
