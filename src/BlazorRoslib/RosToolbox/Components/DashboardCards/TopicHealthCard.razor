@@ -1,0 +1,61 @@
+﻿@using BlazorRoslib.Core.ROS;
+@using BlazorRoslib.Core.ROS.Services;
+@using BlazorRoslib.Core.ROS.Services.StdSrvs;
+@using BlazorRoslib.Core.ROS.Rosapi;
+@using BlazorRoslib.Core.Services;
+@using RosToolbox.CustomPackages.DataRecording;
+@using BlazorRoslib.Core.ROS.Topics;
+
+@inject RoslibInterop RosInterop
+@inject CustomNavManager NavManager
+
+@inject ISnackbar Snackbar
+
+<MudPaper Class="d-flex flex-column align-center justify-center mud-width-full p-4">
+    <MudText Typo="Typo.h6" Color="Color.Secondary">Topic Health</MudText>
+    
+    <MudExpansionPanels Class="m-1">
+        <MudExpansionPanel Text="Topics">
+            @foreach (var topic in Topics)
+            {
+                <MudText Variant="Variant.Outlined" Class="mud-width-full">@topic.Name</MudText>
+            }
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+</MudPaper>
+
+@code{
+    private System.Threading.Timer? timer;
+
+    private Topic[] Topics = Array.Empty<Topic>();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        if (RosInterop.State == RosInteropState.Connected)
+        {
+            UpdateList();
+        }
+        else
+        {
+            RosInterop.OnStateHasChanged += (state) =>
+            {
+                if (state == RosInteropState.Connected)
+                    UpdateList();
+            };
+        }
+        timer = new System.Threading.Timer(async (object? stateInfo) =>
+        {
+            await UpdateList();
+        }, new System.Threading.AutoResetEvent(false), 500, 1000); // fire every 1000 milliseconds
+    }
+
+    async Task UpdateList()
+    {
+        await RosInterop.GetTopics(topics =>
+        {
+            Topics = topics.Where(r => r.MessageType.Equals("health_checks/TopicHealth")).ToArray();
+        });
+
+    }
+}
