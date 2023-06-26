@@ -1,0 +1,54 @@
+﻿@using BlazorRoslib.Core.ROS;
+@using RosToolbox.CustomPackages.HealthChecks;
+
+@inject RoslibInterop RosInterop
+
+<MudPaper Class="d-flex flex-column align-center justify-center mud-width-full p-4">
+    <MudText Typo="Typo.h6" Color="Color.Secondary">@Title</MudText>
+    @switch (Type)
+    {
+        case TopicHealth.TYPE_OK:
+            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Secondary" />
+            break;
+        case TopicHealth.TYPE_WARNING:
+            <MudIcon Icon="@Icons.Material.Filled.AccessAlarm" Color="Color.Warning" />
+            break;
+        case TopicHealth.TYPE_TIMEOUT:
+            <MudIcon Icon="@Icons.Material.Filled.AccessAlarm" Color="Color.Error" />
+            break;
+        default:
+            <MudIcon Icon="@Icons.Material.Filled.Dangerous" Color="Color.Error" />
+            break;
+    }
+    <MudText Typo="Typo.h6">@Hz</MudText>
+</MudPaper>
+
+
+@code {
+    private string Title { get; set; } = "N/A";
+    private string Hz { get; set; } = "N/A";
+    private int Type { get; set; } = TopicHealth.TYPE_N_A;
+
+    private string _topic = "";
+
+    [Parameter]
+    public string Topic
+    {
+        get => _topic;
+        set
+        {
+            //TODO: Unsubscribe!
+            _topic = value;
+            Task.Run(async () => await RosInterop.SubscribeTopic<TopicHealth>(_topic, "health_checks/TopicHealth", OnMessage));
+        }
+    }
+
+    private void OnMessage(TopicHealth msg)
+    {
+        Title = msg.title ?? "N/A";
+        Hz = $"{msg.hz:f2} Hz";
+        Type = msg.type;
+        StateHasChanged();
+    }
+}
+

@@ -11,51 +11,60 @@
 
 @inject ISnackbar Snackbar
 
-<MudPaper Class="d-flex flex-column align-center justify-center mud-width-full p-4">
-    <MudText Typo="Typo.h6" Color="Color.Secondary">Topic Health</MudText>
-    
-    <MudExpansionPanels Class="m-1">
-        <MudExpansionPanel Text="Topics">
-            @foreach (var topic in Topics)
-            {
-                <MudText Variant="Variant.Outlined" Class="mud-width-full">@topic.Name</MudText>
-            }
-        </MudExpansionPanel>
-    </MudExpansionPanels>
-</MudPaper>
+@*<MudItem Style="display:flex;">
+    <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full p-4">
+        <MudText Typo="Typo.h6" Color="Color.Secondary">Topic Health</MudText>
 
-@code{
+        <MudExpansionPanels Class="m-1">
+            <MudExpansionPanel Text="Topics">
+                @foreach (var topic in Topics)
+                {
+                    <MudText Variant="Variant.Outlined" Class="mud-width-full">@topic.Name</MudText>
+                }
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </MudPaper>
+</MudItem>*@
+@foreach (var topic in Topics)
+{
+    <MudItem Style="display:flex;">
+        <RosToolbox.Components.DashboardCards.SingleTopicHealth Topic=@topic.Name />
+    </MudItem>
+}
+
+        @code{
     private System.Threading.Timer? timer;
 
-    private Topic[] Topics = Array.Empty<Topic>();
+        private Topic[] Topics = Array.Empty<Topic>();
 
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        if (RosInterop.State == RosInteropState.Connected)
+        protected override void OnInitialized()
         {
-            UpdateList();
-        }
-        else
-        {
-            RosInterop.OnStateHasChanged += (state) =>
+            base.OnInitialized();
+            if (RosInterop.State == RosInteropState.Connected)
             {
-                if (state == RosInteropState.Connected)
-                    UpdateList();
-            };
+                UpdateList();
+            }
+            else
+            {
+                RosInterop.OnStateHasChanged += (state) =>
+                {
+                    if (state == RosInteropState.Connected)
+                        UpdateList();
+                };
+            }
+            timer = new System.Threading.Timer(async (object? stateInfo) =>
+            {
+                await UpdateList();
+            }, new System.Threading.AutoResetEvent(false), 5000, 5000); // fire every 1000 milliseconds
         }
-        timer = new System.Threading.Timer(async (object? stateInfo) =>
-        {
-            await UpdateList();
-        }, new System.Threading.AutoResetEvent(false), 500, 1000); // fire every 1000 milliseconds
-    }
 
-    async Task UpdateList()
-    {
-        await RosInterop.GetTopics(topics =>
+        async Task UpdateList()
         {
-            Topics = topics.Where(r => r.MessageType.Equals("health_checks/TopicHealth")).ToArray();
-        });
+            await RosInterop.GetTopics(topics =>
+            {
+                Topics = topics.Where(r => r.MessageType.Equals("health_checks/TopicHealth")).ToArray();
+                StateHasChanged();
+            });
 
-    }
-}
+        }
+        }
