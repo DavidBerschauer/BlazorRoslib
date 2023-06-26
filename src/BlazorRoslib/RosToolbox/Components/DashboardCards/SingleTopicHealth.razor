@@ -2,25 +2,26 @@
 @using RosToolbox.CustomPackages.HealthChecks;
 
 @inject RoslibInterop RosInterop
+@inject ISnackbar Snackbar
 
-<MudPaper Class="d-flex flex-column align-center justify-center mud-width-full p-4">
+<MudPaper Class="d-flex flex-column align-center justify-center mud-width-full p-3">
     <MudText Typo="Typo.h6" Color="Color.Secondary">@Title</MudText>
     @switch (Type)
     {
         case TopicHealth.TYPE_OK:
-            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Secondary" />
+            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Secondary" style="height: 60px; width: 60px" />
             break;
         case TopicHealth.TYPE_WARNING:
-            <MudIcon Icon="@Icons.Material.Filled.AccessAlarm" Color="Color.Warning" />
+            <MudIcon Icon="@Icons.Material.Filled.AccessAlarm" Color="Color.Warning" style="height: 60px; width: 60px" />
             break;
         case TopicHealth.TYPE_TIMEOUT:
-            <MudIcon Icon="@Icons.Material.Filled.AccessAlarm" Color="Color.Error" />
+            <MudIcon Icon="@Icons.Material.Filled.AccessAlarm" Color="Color.Error" style="height: 60px; width: 60px" />
             break;
         default:
-            <MudIcon Icon="@Icons.Material.Filled.Dangerous" Color="Color.Error" />
+            <MudIcon Icon="@Icons.Material.Filled.Dangerous" Color="Color.Error" style="height: 60px; width: 60px" />
             break;
     }
-    <MudText Typo="Typo.h6">@Hz</MudText>
+    <MudText>@Hz</MudText>
 </MudPaper>
 
 
@@ -37,7 +38,9 @@
         get => _topic;
         set
         {
-            //TODO: Unsubscribe!
+            //TODO Unsubscribe!
+            //TODO Timeout wenn keine Nachrichten auf dem Topic kommen!
+            //TODO Error State wenn Verbindung weg
             _topic = value;
             Task.Run(async () => await RosInterop.SubscribeTopic<TopicHealth>(_topic, "health_checks/TopicHealth", OnMessage));
         }
@@ -47,8 +50,29 @@
     {
         Title = msg.title ?? "N/A";
         Hz = $"{msg.hz:f2} Hz";
+        var lastType = Type;
         Type = msg.type;
+
+        if(Type != lastType)
+        {
+            switch (Type)
+            {
+                case TopicHealth.TYPE_OK:
+                    Snackbar.Add($"{Title}: Ok", Severity.Success);
+                    break;
+                case TopicHealth.TYPE_WARNING:
+                    Snackbar.Add($"{Title}: frequency low", Severity.Warning);
+                    break;
+                case TopicHealth.TYPE_TIMEOUT:
+                    Snackbar.Add($"{Title}: Timeout!", Severity.Error);
+                    break;
+                default:
+                    Snackbar.Add($"{Title}: Unknown error", Severity.Error);
+                    break;
+            }
+        }
+
         StateHasChanged();
     }
-}
+    }
 

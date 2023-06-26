@@ -32,39 +32,38 @@
     </MudItem>
 }
 
-        @code{
+@code{
     private System.Threading.Timer? timer;
 
-        private Topic[] Topics = Array.Empty<Topic>();
+    private Topic[] Topics = Array.Empty<Topic>();
 
-        protected override void OnInitialized()
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        if (RosInterop.State == RosInteropState.Connected)
         {
-            base.OnInitialized();
-            if (RosInterop.State == RosInteropState.Connected)
-            {
-                UpdateList();
-            }
-            else
-            {
-                RosInterop.OnStateHasChanged += (state) =>
-                {
-                    if (state == RosInteropState.Connected)
-                        UpdateList();
-                };
-            }
-            timer = new System.Threading.Timer(async (object? stateInfo) =>
-            {
-                await UpdateList();
-            }, new System.Threading.AutoResetEvent(false), 5000, 5000); // fire every 1000 milliseconds
+            UpdateList();
         }
-
-        async Task UpdateList()
+        else
         {
-            await RosInterop.GetTopics(topics =>
+            RosInterop.OnStateHasChanged += (state) =>
             {
-                Topics = topics.Where(r => r.MessageType.Equals("health_checks/TopicHealth")).ToArray();
-                StateHasChanged();
-            });
+                if (state == RosInteropState.Connected)
+                    UpdateList();
+            };
+        }
+        timer = new System.Threading.Timer(async (object? stateInfo) =>
+        {
+            await UpdateList();
+        }, new System.Threading.AutoResetEvent(false), 5000, 5000); // fire every 1000 milliseconds
+    }
 
-        }
-        }
+    async Task UpdateList()
+    {
+        await RosInterop.GetTopics(topics =>
+        {
+            Topics = topics.Where(r => r.MessageType.Equals("health_checks/TopicHealth")).OrderBy(t => t.Name).ToArray();
+            StateHasChanged();
+        });
+    }
+}
